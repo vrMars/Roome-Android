@@ -12,10 +12,18 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MessageAdapter adapter;
     private List<Card> cardList;
+    private DatabaseReference mRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +54,81 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        prepareMessages();
+        SwipeableRecyclerViewTouchListener swipeTouchListener =
+                new SwipeableRecyclerViewTouchListener(recyclerView,
+                        new SwipeableRecyclerViewTouchListener.SwipeListener() {
+
+                            public boolean canSwipe(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public boolean canSwipeLeft(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public boolean canSwipeRight(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    cardList.remove(position);
+                                    adapter.notifyItemRemoved(position);
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onDismissedBySwipeRight(RecyclerView recyclerView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    cardList.remove(position);
+                                    adapter.notifyItemRemoved(position);
+                                }
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+
+        recyclerView.addOnItemTouchListener(swipeTouchListener);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        mRef = database.getReference("CardList");
+
+        mRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Card value = dataSnapshot.getValue(Card.class);
+                prepareMessages(value);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+    /**
+     * Adding few messages for testing
+     */
+    private void prepareMessages(Card a) {
+        cardList.add(a);
     }
 
     /**
@@ -78,32 +161,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    /**
-     * Adding few messages for testing
-     */
-    private void prepareMessages() {
-        Card a = new Card("True Romance", "testing 1 2 3 long message", "0");
-        cardList.add(a);
-
-        Card b = new Card("Fake Romance", "testing 1 2 3 4 long message", "0");
-        cardList.add(b);
-
-        Card c = new Card("Clean the dishes", "testing 1 2 3 4 long me 12312ssage", "0");
-        cardList.add(c);
-
-        Card d = new Card("True Romance", "testing 1 2 3 long message testing 1 2 3 long message testing 1 2 3 long message", "0");
-        cardList.add(d);
-
-        Card e = new Card("Fake Romance", "testing 1 2 3 4 long message", "0");
-        cardList.add(e);
-
-        Card f = new Card("Clean the dishes", "testing 1 2 3 4 long me 12312ssage", "0");
-        cardList.add(f);
-
-
-
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
