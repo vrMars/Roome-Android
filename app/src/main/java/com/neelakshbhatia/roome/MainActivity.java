@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MessageAdapter adapter;
     private List<Card> cardList;
+    private ArrayList<String> mKeys = new ArrayList<>();
     private DatabaseReference mRef;
     Card value = new Card("","","");
     int rmPosition;
@@ -98,7 +99,7 @@ public class MainActivity extends AppCompatActivity {
                                     });
                                     cardList.remove(position);
                                     Toast.makeText(getApplicationContext(),"Deleted :)",Toast.LENGTH_SHORT).show();
-
+                                    rmPosition = position;
                                     adapter.notifyItemRemoved(position);
                                 }
                                 adapter.notifyDataSetChanged();
@@ -122,6 +123,8 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     });
                                     cardList.remove(position);
+                                    Toast.makeText(getApplicationContext(),"Deleted :)",Toast.LENGTH_SHORT).show();
+                                    rmPosition = position;
                                     adapter.notifyItemRemoved(position);
                                 }
                                 adapter.notifyDataSetChanged();
@@ -137,21 +140,30 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 value = dataSnapshot.getValue(Card.class);
-                prepareMessages(value);
+                mKeys.add(dataSnapshot.getKey());
+                int index=0;
+
+                prepareMessages(index,value);
+                index++;
                 adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                value = dataSnapshot.getValue(Card.class);
-                prepareMessages(value);
+                Card newVal = dataSnapshot.getValue(Card.class);
+                String key = dataSnapshot.getKey();
+                int index = mKeys.indexOf(key);
+                if(index>=0) {
+
+                    cardList.remove(index);
+                }
+                prepareMessages(index,newVal);
+                adapter.notifyItemRemoved(index);
                 adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                adapter.notifyDataSetChanged();
-
             }
 
             @Override
@@ -168,8 +180,8 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Adding few messages for testing
      */
-    private void prepareMessages(Card a) {
-        cardList.add(a);
+    private void prepareMessages(int index, Card a) {
+        cardList.add(index,a);
     }
 
     /**
