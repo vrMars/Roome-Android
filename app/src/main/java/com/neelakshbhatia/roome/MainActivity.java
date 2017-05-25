@@ -17,6 +17,7 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -81,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onDismissedBySwipeLeft(RecyclerView recyclerView, int[] reverseSortedPositions) {
                                 for (int position : reverseSortedPositions) {
                                     Query applesQuery = mRef.orderByChild("title").equalTo(cardList.get(position).getTitle());
+                                    Log.e(TAG, String.valueOf(mRef.orderByChild("title")));
                                     applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(DataSnapshot dataSnapshot) {
@@ -95,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     });
                                     cardList.remove(position);
+                                    Toast.makeText(getApplicationContext(),"Deleted :)",Toast.LENGTH_SHORT).show();
+
                                     adapter.notifyItemRemoved(position);
                                 }
                                 adapter.notifyDataSetChanged();
