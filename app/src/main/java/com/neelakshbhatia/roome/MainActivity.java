@@ -18,6 +18,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.InputType;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Menu;
@@ -25,6 +26,7 @@ import android.view.MenuItem;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
@@ -37,6 +39,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "LOG";
@@ -51,7 +55,8 @@ public class MainActivity extends AppCompatActivity {
     Card value = new Card("","","");
     int rmPosition;
     int indexKey;
-    private String m_Text = "";
+    private String m_TextTitle = "";
+    private String m_TextMessage = "";
 
 
     @Override
@@ -66,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
         cardList = new ArrayList<>();
         adapter = new MessageAdapter(this, cardList);
 
+        //RecyclerView for Cards setup
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(5), true));
@@ -219,20 +225,34 @@ public class MainActivity extends AppCompatActivity {
 
     private void alertBuilder(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Title");
+        builder.setTitle("New Message");
         // Set up the input
-        final EditText input = new EditText(this);
+        Context context = recyclerView.getContext();
+        LinearLayout layout = new LinearLayout(context);
+        layout.setPadding(80,80,80,80);
+        layout.setOrientation(LinearLayout.VERTICAL);
+
+        final EditText titleBox = new EditText(context);
+        titleBox.setHint("Title");
+        layout.addView(titleBox);
+
+        final EditText descriptionBox = new EditText(context);
+        descriptionBox.setHint("Content");
+        layout.addView(descriptionBox);
+
         // Specify the type of input expected; this, for example, sets the input as a normal, and will do nothing
-        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
-        builder.setView(input);
+        //inputTitle.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
+        //inputMessage.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
+        builder.setView(layout);
 
         // Set up the buttons
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                m_Text = input.getText().toString();
-                Card a = createCard(m_Text);
-                mRef.child(m_Text).setValue(a);
+                m_TextTitle = titleBox.getText().toString();
+                m_TextMessage = descriptionBox.getText().toString();
+                Card a = createCard(m_TextTitle,m_TextMessage);
+                mRef.child(m_TextTitle).setValue(a);
                 adapter.notifyDataSetChanged();
             }
         });
@@ -244,11 +264,11 @@ public class MainActivity extends AppCompatActivity {
         });
         builder.show();
     }
-    private Card createCard(String title){
+    private Card createCard(String title, String message){
         Card name = new Card();
         name.setTitle(title);
         name.setDate("lol");
-        name.setMessage("testImgood");
+        name.setMessage(message);
         return name;
     }
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {

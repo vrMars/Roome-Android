@@ -69,11 +69,23 @@
             android:layout_height="wrap_content"
             android:scrollbars="vertical"/>
 
+            <TextView
+                android:id="@+id/commentText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/commentsView"
+                android:layout_centerInParent="true"
+                android:paddingBottom="20dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:textColor="#4c4c4c"
+                android:textSize="14dp"/>
+
         <EditText
             android:id="@+id/commentField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/commentsView"
+            android:layout_below="@id/commentText"
             android:hint="Leave a comment..."
             android:inputType="textAutoCorrect|textAutoComplete"
             android:paddingBottom="10dp"
