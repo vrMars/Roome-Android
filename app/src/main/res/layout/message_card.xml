@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_margin="5dp"
+        android:layout_margin="10dp"
         android:elevation="3dp"
         card_view:cardCornerRadius="4dp">
 
@@ -20,7 +20,7 @@
             <ImageView
                 android:id="@+id/thumbnail"
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
+                android:layout_height="100dp"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:clickable="true"
                 android:scaleType="fitXY" />
@@ -34,7 +34,8 @@
                 android:paddingRight="10dp"
                 android:paddingTop="10dp"
                 android:textColor="#4c4c4c"
-                android:textSize="15dp" />
+                android:layout_centerInParent="true"
+                android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/count"

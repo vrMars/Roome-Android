@@ -39,17 +39,13 @@ public class MainActivity extends AppCompatActivity {
     private DatabaseReference mRef;
     Card value = new Card("","","");
     int rmPosition;
+    int indexKey;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        initCollapsingToolbar();
-
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
         cardList = new ArrayList<>();
@@ -57,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
 
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(5), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
@@ -98,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     });
                                     cardList.remove(position);
-                                    Toast.makeText(getApplicationContext(),"Deleted :)",Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(recyclerView,"Deleted :)",Snackbar.LENGTH_SHORT).show();
                                     rmPosition = position;
                                     adapter.notifyItemRemoved(position);
                                 }
@@ -123,9 +119,10 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     });
                                     cardList.remove(position);
-                                    Toast.makeText(getApplicationContext(),"Deleted :)",Toast.LENGTH_SHORT).show();
+                                    Snackbar.make(recyclerView,"Deleted :)",Snackbar.LENGTH_SHORT).show();
                                     rmPosition = position;
                                     adapter.notifyItemRemoved(position);
+                                    indexKey--;
                                 }
                                 adapter.notifyDataSetChanged();
                             }
@@ -141,10 +138,7 @@ public class MainActivity extends AppCompatActivity {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 value = dataSnapshot.getValue(Card.class);
                 mKeys.add(dataSnapshot.getKey());
-                int index=0;
-
-                prepareMessages(index,value);
-                index++;
+                prepareMessages(value);
                 adapter.notifyDataSetChanged();
             }
 
@@ -153,17 +147,17 @@ public class MainActivity extends AppCompatActivity {
                 Card newVal = dataSnapshot.getValue(Card.class);
                 String key = dataSnapshot.getKey();
                 int index = mKeys.indexOf(key);
-                if(index>=0) {
-
-                    cardList.remove(index);
-                }
-                prepareMessages(index,newVal);
-                adapter.notifyItemRemoved(index);
+                cardList.set(index,newVal);
                 adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
+                Card rmVal = dataSnapshot.getValue(Card.class);
+                String key = dataSnapshot.getKey();
+                int index = mKeys.indexOf(key);
+                mKeys.remove(key);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -180,40 +174,8 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Adding few messages for testing
      */
-    private void prepareMessages(int index, Card a) {
-        cardList.add(index,a);
-    }
-
-    /**
-     * Initializing collapsing toolbar
-     * Will show and hide the toolbar title on scroll
-     */
-    private void initCollapsingToolbar() {
-        final CollapsingToolbarLayout collapsingToolbar =
-                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(" ");
-        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        appBarLayout.setExpanded(true);
-
-        // hiding & showing the title when toolbar expanded & collapsed
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            boolean isShow = false;
-            int scrollRange = -1;
-
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange();
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbar.setTitle(getString(R.string.app_name));
-                    isShow = true;
-                } else if (isShow) {
-                    collapsingToolbar.setTitle(" ");
-                    isShow = false;
-                }
-            }
-        });
+    private void prepareMessages(Card a) {
+        cardList.add(a);
     }
 
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
