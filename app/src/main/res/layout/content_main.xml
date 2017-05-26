@@ -15,9 +15,9 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="0dp"
         android:clipToPadding="false"
         android:scrollbars="vertical"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -29,9 +29,10 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="bottom|right"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/ic_menu_add"
-        android:layout_gravity="bottom|right" />
+        android:elevation="4dp"
+        android:src="@android:drawable/ic_menu_edit" />
 
 
 </android.support.design.widget.CoordinatorLayout>
