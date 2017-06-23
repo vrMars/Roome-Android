@@ -31,6 +31,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.Logger;
 
 public class EmailPasswordActivity extends BaseActivity implements
         View.OnClickListener {
@@ -129,7 +130,11 @@ public class EmailPasswordActivity extends BaseActivity implements
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            if (user!=null) {
+                                Intent startMain = new Intent(getApplicationContext(),MainActivity.class);
+                                Log.d("haha","TRUE");
+                                startActivity(startMain);
+                            }
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
@@ -219,8 +224,6 @@ public class EmailPasswordActivity extends BaseActivity implements
             findViewById(R.id.signed_in_buttons).setVisibility(View.VISIBLE);
 
             findViewById(R.id.verify_email_button).setEnabled(!user.isEmailVerified());
-            Intent startMain = new Intent(this, MainActivity.class);
-            startActivity(startMain);
 
         } else {
             mStatusTextView.setText(R.string.signed_out);
