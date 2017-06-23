@@ -22,17 +22,20 @@
         <ImageView
             android:id="@+id/icon"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:scaleX="1.2"
+            android:scaleY="1.2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/desc_firebase_lockup"
-            android:paddingBottom="100dp"
+            android:scaleType="fitXY"
             android:src="@mipmap/logo" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="150dp"
             android:backgroundTint="@color/cardview_dark_background"
-            android:gravity="center_vertical|center_horizontal"
+            android:gravity="bottom|center_horizontal"
             android:paddingBottom="50dp">
 
             <LinearLayout
@@ -59,6 +62,15 @@
                     android:layout_weight="1"
                     android:hint="@string/hint_password"
                     android:inputType="textPassword" />
+
+                <Button
+                    android:id="@+id/email_create_account_button"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="10dp"
+                    android:layout_weight="1"
+                    android:text="@string/create_account" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -77,12 +89,6 @@
                     android:layout_weight="1"
                     android:text="@string/sign_in" />
 
-                <Button
-                    android:id="@+id/email_create_account_button"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/create_account" />
             </LinearLayout>
 
             <LinearLayout

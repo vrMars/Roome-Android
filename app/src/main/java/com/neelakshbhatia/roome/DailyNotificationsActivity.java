@@ -58,7 +58,7 @@ public class DailyNotificationsActivity extends AppCompatActivity {
         setSupportActionBar(myToolbar);
         //Get action bar
         ActionBar ab = getSupportActionBar();
-        ab.setTitle("BAD");
+        ab.setTitle("Roome");
         //Enable up button
         ab.setDisplayHomeAsUpEnabled(true);
 
