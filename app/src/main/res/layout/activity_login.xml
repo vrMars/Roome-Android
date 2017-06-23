@@ -1,4 +1,20 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#000000">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:elevation="0dp"
+        app:srcCompat="@color/cardview_dark_background" />
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
@@ -10,6 +26,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:elevation="1dp"
         android:layout_weight="3"
         android:gravity="center_horizontal"
         android:orientation="vertical"
@@ -55,7 +72,7 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="#dadada"
+        android:background="?attr/colorPrimary"
         android:gravity="center_vertical">
 
         <LinearLayout
@@ -97,16 +114,14 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/sign_in"
-                />
+                android:text="@string/sign_in" />
 
             <Button
                 android:id="@+id/email_create_account_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/create_account"
-                />
+                android:text="@string/create_account" />
         </LinearLayout>
 
         <LinearLayout
@@ -125,28 +140,27 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
-                android:text="@string/sign_out"
-                />
+                android:text="@string/sign_out" />
 
             <Button
                 android:id="@+id/verify_email_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
-                android:text="@string/verify_email"
-                />
+                android:text="@string/verify_email" />
 
             <Button
                 android:id="@+id/proceed_to_list_button"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.0"
-                android:visibility="gone"
                 android:text="@string/Continue"
-                />
+                android:visibility="gone" />
 
         </LinearLayout>
 
     </RelativeLayout>
 
 </LinearLayout>
+
+    </RelativeLayout>
