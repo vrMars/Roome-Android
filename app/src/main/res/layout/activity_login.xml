@@ -31,7 +31,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="top"
+            android:backgroundTint="@color/cardview_dark_background"
+            android:gravity="center_vertical|center_horizontal"
             android:paddingBottom="50dp">
 
             <LinearLayout
@@ -94,13 +95,6 @@
                 android:paddingRight="16dp"
                 android:visibility="gone"
                 android:weightSum="2.0">
-
-                <ImageView
-                    android:id="@+id/imageView3"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1.0"
-                    app:srcCompat="@color/cardview_light_background" />
 
                 <Button
                     android:id="@+id/sign_out_button"
