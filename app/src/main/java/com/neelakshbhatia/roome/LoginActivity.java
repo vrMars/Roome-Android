@@ -52,6 +52,11 @@ public class LoginActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
+
         // Views
         mStatusTextView = (TextView) findViewById(R.id.status);
         mDetailTextView = (TextView) findViewById(R.id.detail);
@@ -82,6 +87,10 @@ public class LoginActivity extends BaseActivity implements
     // [END on_start_check_user]
 
     private void createAccount(String email, String password) {
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
         Log.d(TAG, "createAccount:" + email);
         if (!validateForm()) {
             return;
@@ -116,6 +125,10 @@ public class LoginActivity extends BaseActivity implements
     }
 
     private void signIn(String email, String password) {
+        View decorView = getWindow().getDecorView();
+        // Hide the status bar.
+        int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+        decorView.setSystemUiVisibility(uiOptions);
         Log.d(TAG, "signIn:" + email);
         if (!validateForm()) {
             return;
@@ -134,6 +147,10 @@ public class LoginActivity extends BaseActivity implements
                             FirebaseUser user = mAuth.getCurrentUser();
                             if (user!=null && user.isEmailVerified()==true) {
                                 Log.d("haha","TRUE");
+                                View decorView = getWindow().getDecorView();
+                                // Hide the status bar.
+                                int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
+                                decorView.setSystemUiVisibility(uiOptions);
                                 startActivity(startMain);
                             }
                         } else {
