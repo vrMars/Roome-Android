@@ -16,12 +16,15 @@
 
 package com.neelakshbhatia.roome;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,8 +35,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+
 public class LoginActivity extends BaseActivity implements
-        View.OnClickListener {
+        View.OnClickListener, View.OnTouchListener{
 
     private static final String TAG = "EmailPassword";
 
@@ -50,6 +55,7 @@ public class LoginActivity extends BaseActivity implements
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_login);
 
         View decorView = getWindow().getDecorView();
@@ -69,6 +75,8 @@ public class LoginActivity extends BaseActivity implements
         findViewById(R.id.sign_out_button).setOnClickListener(this);
         findViewById(R.id.verify_email_button).setOnClickListener(this);
         findViewById(R.id.proceed_to_list_button).setOnClickListener(this);
+
+        findViewById(R.id.main_layout).setOnTouchListener(this);
 
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
@@ -276,5 +284,12 @@ public class LoginActivity extends BaseActivity implements
         else if (i == R.id.proceed_to_list_button){
             startActivity(startMain);
         }
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+        return true;
     }
 }

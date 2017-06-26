@@ -29,7 +29,7 @@
     <string name="Continue">Continue</string>
     <string name="get_custom_token">Get Token</string>
     <string name="sign_in">Sign In</string>
-    <string name="create_account">Create Account</string>
+    <string name="create_account">Sign up</string>
     <string name="sign_out">Sign Out</string>
     <string name="verify_email">Verify Email</string>
     <string name="disconnect">Disconnect</string>
