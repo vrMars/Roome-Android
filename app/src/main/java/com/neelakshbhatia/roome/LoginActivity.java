@@ -238,7 +238,8 @@ public class LoginActivity extends BaseActivity implements
             mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
 
             findViewById(R.id.email_password_buttons).setVisibility(View.GONE);
-            findViewById(R.id.email_password_fields).setVisibility(View.GONE);
+            findViewById(R.id.email_field).setVisibility(View.GONE);
+            findViewById(R.id.password_field).setVisibility(View.GONE);
             findViewById(R.id.signed_in_buttons).setVisibility(View.VISIBLE);
 
             if (user.isEmailVerified()) {
@@ -254,7 +255,8 @@ public class LoginActivity extends BaseActivity implements
             mDetailTextView.setText(null);
 
             findViewById(R.id.email_password_buttons).setVisibility(View.VISIBLE);
-            findViewById(R.id.email_password_fields).setVisibility(View.VISIBLE);
+            findViewById(R.id.email_field).setVisibility(View.VISIBLE);
+            findViewById(R.id.password_field).setVisibility(View.VISIBLE);
             findViewById(R.id.signed_in_buttons).setVisibility(View.GONE);
         }
     }
