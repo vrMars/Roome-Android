@@ -52,10 +52,12 @@
                 android:layout_weight="0.42"
                 android:orientation="horizontal"
                 android:paddingLeft="16dp"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:background="@drawable/round_corners_bg"
                 android:paddingRight="16dp"
                 android:focusable="true"
+                android:paddingTop="10dp"
+                android:paddingBottom="16dp"
                 android:focusableInTouchMode ="true">
 
                 <EditText
@@ -76,9 +78,13 @@
                 android:layout_weight="0.42"
                 android:orientation="horizontal"
                 android:paddingLeft="16dp"
-                android:visibility="gone"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:visibility="visible"
                 android:background="@drawable/round_corners_bg"
                 android:paddingRight="16dp"
+                android:paddingBottom="16dp"
+                android:paddingTop="10dp"
                 android:focusable="true"
                 android:focusableInTouchMode ="true">
 
@@ -95,12 +101,12 @@
 
             <LinearLayout
                 android:id="@+id/email_password_buttons"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/password_field"
                 android:orientation="horizontal"
-                android:visibility="gone"
-
+                android:visibility="visible"
+                android:weightSum="2"
                 android:paddingLeft="16dp"
                 android:paddingRight="16dp">
 
@@ -132,7 +138,7 @@
                 android:orientation="horizontal"
                 android:paddingLeft="0dp"
                 android:paddingRight="0dp"
-                android:visibility="visible"
+                android:visibility="gone"
                 android:weightSum="2">
 
                 <Button
