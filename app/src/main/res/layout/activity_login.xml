@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main_layout"
@@ -7,8 +7,16 @@
     android:orientation="vertical"
     android:focusable="true"
     android:focusableInTouchMode ="true"
-    android:background="#006964"
     >
+
+    <ImageView
+        android:id="@+id/background_login"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="40"
+        android:alpha="0.85"
+        android:scaleType="centerCrop"
+        app:srcCompat="@color/cardview_dark_background" />
 
     <LinearLayout
         android:id="@+id/super_layout"
@@ -23,8 +31,8 @@
         <ImageView
             android:id="@+id/icon"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:scaleX="1.2"
-            android:scaleY="1.2"
+            android:scaleX="1.3"
+            android:scaleY="1.3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:contentDescription="@string/desc_firebase_lockup"
@@ -32,6 +40,8 @@
             android:layout_weight="40"
             android:src="@mipmap/logo"
             android:padding="10px"
+            android:tint="#b6b6b6"
+            android:tintMode="multiply"
             />
 
         <RelativeLayout
@@ -56,8 +66,8 @@
                 android:background="@drawable/round_corners_bg"
                 android:paddingRight="16dp"
                 android:focusable="true"
-                android:paddingTop="10dp"
-                android:paddingBottom="16dp"
+                android:paddingTop="7dp"
+                android:paddingBottom="12dp"
                 android:focusableInTouchMode ="true">
 
                 <EditText
@@ -83,8 +93,8 @@
                 android:visibility="visible"
                 android:background="@drawable/round_corners_bg"
                 android:paddingRight="16dp"
-                android:paddingBottom="16dp"
-                android:paddingTop="10dp"
+                android:paddingBottom="12dp"
+                android:paddingTop="7dp"
                 android:focusable="true"
                 android:focusableInTouchMode ="true">
 
@@ -201,4 +211,4 @@
     </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

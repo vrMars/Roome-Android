@@ -26,9 +26,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -62,6 +64,11 @@ public class LoginActivity extends BaseActivity implements
         // Hide the status bar.
         int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
         decorView.setSystemUiVisibility(uiOptions);
+
+        //Background
+        ImageView imageView = (ImageView) findViewById(R.id.background_login);
+
+        Glide.with(this).load("http://www.designdpi.com/blog/images/blog/subtle-animated-gif-03.gif").into(imageView);
 
         // Views
         mStatusTextView = (TextView) findViewById(R.id.status);
