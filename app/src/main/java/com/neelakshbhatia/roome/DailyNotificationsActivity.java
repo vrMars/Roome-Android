@@ -202,6 +202,7 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
                     value = dataSnapshot.getValue(Card.class);
                     mKeys.add(dataSnapshot.getKey());
                     prepareMessages(value);

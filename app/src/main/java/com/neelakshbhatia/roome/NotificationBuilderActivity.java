@@ -69,11 +69,11 @@ public class NotificationBuilderActivity extends AppCompatActivity {
     }
 
     private Card createCard(String title, String message){
-        Card name = new Card();
-        name.setTitle(title);
-        name.setDate(String.valueOf(DATE));
-        name.setMessage(message);
-        return name;
+            Card name = new Card();
+            name.setTitle(title);
+            name.setDate(String.valueOf(DATE));
+            name.setMessage(message);
+            return name;
     }
 
 
@@ -82,9 +82,13 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         super.onPause();
         String m_TextTitle = title.getText().toString();
         String m_TextMessage = description.getText().toString();
-            Card a = createCard(m_TextTitle, m_TextMessage);
+        Card a = createCard(m_TextTitle, m_TextMessage);
+        if (!a.getTitle().equals("") && !a.getMessage().equals("")) {
+            Log.d("bad","ha:"+a.getTitle());
             mRef.child(m_TextTitle).setValue(a);
             adapter.notifyDataSetChanged();
+        }
+        Log.d("bad","good");
         onLeaveThisActivity();
     }
 
