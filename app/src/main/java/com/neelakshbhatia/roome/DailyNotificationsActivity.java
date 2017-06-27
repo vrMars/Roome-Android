@@ -47,10 +47,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class DailyNotificationsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "LOG";
-    private RecyclerView recyclerView;
-    private MessageAdapter adapter;
     private List<Card> cardList;
     private ArrayList<String> mKeys = new ArrayList<>();
     private DatabaseReference mRef;
@@ -67,6 +66,25 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
     private String m_TextTitle = "";
     private String m_TextMessage = "";
 
+    private static RecyclerView recyclerView;
+
+    public static RecyclerView getRecyclerView(){
+        return recyclerView;
+    }
+
+    public void setRecyclerView(RecyclerView x){
+        this.recyclerView = x;
+    }
+
+    private static MessageAdapter adapter;
+
+    public static MessageAdapter getAdapter(){
+        return adapter;
+    }
+
+    public void setAdapter (MessageAdapter x){
+        this.adapter = x;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +93,7 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         setContentView(R.layout.activity_daily_notifications);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
+        myToolbar.setTitle("Home");
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

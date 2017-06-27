@@ -79,7 +79,7 @@
     <string name="title_activity_new_notification">NewNotificationActivity</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="title_activity_notification_builder">NotificationBuilderActivity</string>
+    <string name="title_activity_notification_builder">Create a message</string>
     <string name="drawer_open">Drawer Opened</string>
     <string name="drawer_close">Drawer Closed</string>
     <string name="title_activity_main">MainActivity</string>
