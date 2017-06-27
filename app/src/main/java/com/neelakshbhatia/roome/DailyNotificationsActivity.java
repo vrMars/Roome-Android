@@ -1,27 +1,41 @@
 package com.neelakshbhatia.roome;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.transition.Explode;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,7 +47,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DailyNotificationsActivity extends AppCompatActivity {
+public class DailyNotificationsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "LOG";
     private RecyclerView recyclerView;
     private MessageAdapter adapter;
@@ -41,7 +55,11 @@ public class DailyNotificationsActivity extends AppCompatActivity {
     private ArrayList<String> mKeys = new ArrayList<>();
     private DatabaseReference mRef;
 
+    private Intent signOut;
+
     private FloatingActionButton fab;
+
+    private FirebaseAuth mAuth;
 
     Card value = new Card("","","");
     int rmPosition;
@@ -52,15 +70,17 @@ public class DailyNotificationsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_daily_notifications);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
-        //Get action bar
-        ActionBar ab = getSupportActionBar();
-        ab.setTitle("Roome");
-        //Enable up button
-        ab.setDisplayHomeAsUpEnabled(true);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, myToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
 
@@ -153,7 +173,8 @@ public class DailyNotificationsActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             alertBuilder();
+                Intent createNotification = new Intent(getApplicationContext(),NotificationBuilderActivity.class);
+                startActivity(createNotification);
             }
         });
 
@@ -308,5 +329,82 @@ public class DailyNotificationsActivity extends AppCompatActivity {
     private int dpToPx(int dp) {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+    }
+
+    public void signOut() {
+        mAuth = FirebaseAuth.getInstance();
+        if (mAuth != null) {
+            mAuth.signOut();
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                signOut();
+                signOut = new Intent(getApplicationContext(),LoginActivity.class);
+                startActivity(signOut);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void finish() {
+        super.finish();
+    }
+
+
+
+    // It's cleaner to animate the start of new activities the same way.
+    // Override startActivity(), and call *overridePendingTransition*
+    // right after the super, so every single activity transaction will be animated:
+
+    @Override
+    public void startActivity(Intent intent) {
+        super.startActivity(intent);
+        if (intent != signOut) {
+            onStartNewActivity();
+        }
+    }
+
+    @Override
+    public void startActivity(Intent intent, Bundle options) {
+        super.startActivity(intent, options);
+        if (intent != signOut) {
+            onStartNewActivity();
+        }
+    }
+
+    protected void onStartNewActivity() {
+        overridePendingTransition(R.transition.enter_from_right, R.transition.exit_to_left);
     }
 }

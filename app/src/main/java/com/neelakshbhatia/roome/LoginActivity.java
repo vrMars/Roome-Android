@@ -187,7 +187,7 @@ public class LoginActivity extends BaseActivity implements
         // [END sign_in_with_email]
     }
 
-    private void signOut() {
+    public void signOut() {
         mAuth.signOut();
         updateUI(null);
     }

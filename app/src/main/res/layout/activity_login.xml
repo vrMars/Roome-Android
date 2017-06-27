@@ -116,8 +116,6 @@
                 android:layout_below="@+id/password_field"
                 android:layout_weight="1"
                 android:orientation="horizontal"
-                android:paddingLeft="16dp"
-                android:paddingRight="16dp"
                 android:visibility="visible"
                 android:weightSum="2">
 
@@ -126,16 +124,21 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textSize="20sp"
+                    android:background="@drawable/round_corner_button"
+                    android:textColor="@android:color/white"
                     android:fontFamily="sans-serif-condensed"
                     android:text="@string/create_account" />
 
-
                 <Button
                     android:id="@+id/email_sign_in_button"
-                    style="@style/Widget.AppCompat.Button.Colored"
+                    style="@style/Widget.AppCompat.Button"
                     android:layout_width="0dp"
+                    android:textColor="@android:color/white"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:textSize="20sp"
+                    android:background="@drawable/round_corner_button_primary"
                     android:fontFamily="sans-serif-condensed"
                     android:text="@string/sign_in" />
             </LinearLayout>
