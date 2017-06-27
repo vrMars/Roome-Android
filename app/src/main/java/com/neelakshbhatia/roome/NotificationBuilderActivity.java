@@ -10,9 +10,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -23,8 +26,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Console;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicMarkableReference;
 
+import static java.sql.Types.DATE;
+import static java.sql.Types.NULL;
 
 
 public class NotificationBuilderActivity extends AppCompatActivity {
@@ -32,7 +39,12 @@ public class NotificationBuilderActivity extends AppCompatActivity {
     private MessageAdapter adapter;
     private DatabaseReference mRef;
     private RecyclerView recyclerView;
-    private DailyNotificationsActivity cool;
+
+    private TextView title;
+    private TextView description;
+
+
+    private DailyNotificationsActivity notificationActivity;
 
 
     @Override
@@ -44,61 +56,22 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        title = (EditText) findViewById(R.id.title_editText);
+        description = (EditText) findViewById(R.id.description_editText);
+
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mRef = database.getReference("CardList");
 
-        recyclerView = cool.getRecyclerView();
-        adapter = cool.getAdapter();
-
-        alertBuilder();
-    }
-
-    private void alertBuilder() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("New Message");
-        // Set up the input
-        Context context = recyclerView.getContext();
-        LinearLayout layout = new LinearLayout(context);
-        layout.setPadding(80,80,80,80);
-        layout.setOrientation(LinearLayout.VERTICAL);
-
-        final EditText titleBox = new EditText(context);
-        titleBox.setHint("Title");
-        layout.addView(titleBox);
-
-        final EditText descriptionBox = new EditText(context);
-        descriptionBox.setHint("Content");
-        layout.addView(descriptionBox);
-
-        // Specify the type of input expected; this, for example, sets the input as a normal, and will do nothing
-        //inputTitle.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
-        //inputMessage.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
-        builder.setView(layout);
-
-        // Set up the buttons
-        builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                String m_TextTitle = titleBox.getText().toString();
-                String m_TextMessage = descriptionBox.getText().toString();
-                Card a = createCard(m_TextTitle,m_TextMessage);
-                mRef.child(m_TextTitle).setValue(a);
-                adapter.notifyDataSetChanged();
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        builder.show();
+        //Get recyclerView and adapter from other activity instance
+        recyclerView = notificationActivity.getRecyclerView();
+        adapter = notificationActivity.getAdapter();
     }
 
     private Card createCard(String title, String message){
         Card name = new Card();
         name.setTitle(title);
-        name.setDate("lol");
+        name.setDate(String.valueOf(DATE));
         name.setMessage(message);
         return name;
     }
@@ -107,6 +80,11 @@ public class NotificationBuilderActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
+        String m_TextTitle = title.getText().toString();
+        String m_TextMessage = description.getText().toString();
+            Card a = createCard(m_TextTitle, m_TextMessage);
+            mRef.child(m_TextTitle).setValue(a);
+            adapter.notifyDataSetChanged();
         onLeaveThisActivity();
     }
 

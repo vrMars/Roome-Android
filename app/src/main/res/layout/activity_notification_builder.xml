@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.neelakshbhatia.roome.NotificationBuilderActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.neelakshbhatia.roome.NotificationBuilderActivity"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:id="@+id/appBarLayout">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
@@ -20,6 +23,28 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_notification_builder" />
+    <include layout="@layout/content_notification_builder"
+        android:id="@+id/include" />
 
-</android.support.design.widget.CoordinatorLayout>
+    <EditText
+        android:id="@+id/title_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:hint="Title"
+        android:layout_below="@+id/appBarLayout"
+        android:layout_alignParentStart="true"
+        android:layout_margin="50dp" />
+    <EditText
+        android:id="@+id/description_editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:hint="Description"
+        android:layout_below="@+id/title_editText"
+        android:layout_alignParentStart="true"
+        android:layout_margin="50dp" />
+
+
+</RelativeLayout>
+

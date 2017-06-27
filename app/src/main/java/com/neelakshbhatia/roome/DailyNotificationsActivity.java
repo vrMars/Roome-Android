@@ -106,6 +106,8 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         cardList = new ArrayList<>();
         adapter = new MessageAdapter(this, cardList);
 
+        adapter.notifyDataSetChanged();
+
         //RecyclerView for Cards setup
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -200,19 +202,19 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         mRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                value = dataSnapshot.getValue(Card.class);
-                mKeys.add(dataSnapshot.getKey());
-                prepareMessages(value);
-                adapter.notifyDataSetChanged();
+                    value = dataSnapshot.getValue(Card.class);
+                    mKeys.add(dataSnapshot.getKey());
+                    prepareMessages(value);
+                    adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Card newVal = dataSnapshot.getValue(Card.class);
-                String key = dataSnapshot.getKey();
-                int index = mKeys.indexOf(key);
-                cardList.set(index,newVal);
-                adapter.notifyDataSetChanged();
+                    Card newVal = dataSnapshot.getValue(Card.class);
+                    String key = dataSnapshot.getKey();
+                    int index = mKeys.indexOf(key);
+                    cardList.set(index, newVal);
+                    adapter.notifyDataSetChanged();
             }
 
             @Override
