@@ -187,8 +187,11 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
                         });
 
         recyclerView.addOnItemTouchListener(swipeTouchListener);
+
+        //Firebase shit
+        mAuth = FirebaseAuth.getInstance();
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        mRef = database.getReference("CardList");
+        mRef = database.getReference("users/"+mAuth.getCurrentUser().getUid());
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -262,47 +265,6 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         cardList.add(a);
     }
 
-    private void alertBuilder(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("New Message");
-        // Set up the input
-        Context context = recyclerView.getContext();
-        LinearLayout layout = new LinearLayout(context);
-        layout.setPadding(80,80,80,80);
-        layout.setOrientation(LinearLayout.VERTICAL);
-
-        final EditText titleBox = new EditText(context);
-        titleBox.setHint("Title");
-        layout.addView(titleBox);
-
-        final EditText descriptionBox = new EditText(context);
-        descriptionBox.setHint("Content");
-        layout.addView(descriptionBox);
-
-        // Specify the type of input expected; this, for example, sets the input as a normal, and will do nothing
-        //inputTitle.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
-        //inputMessage.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_NORMAL);
-        builder.setView(layout);
-
-        // Set up the buttons
-        builder.setPositiveButton("Create", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                m_TextTitle = titleBox.getText().toString();
-                m_TextMessage = descriptionBox.getText().toString();
-                Card a = createCard(m_TextTitle,m_TextMessage);
-                mRef.child(m_TextTitle).setValue(a);
-                adapter.notifyDataSetChanged();
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.cancel();
-            }
-        });
-        builder.show();
-    }
     private Card createCard(String title, String message){
         Card name = new Card();
         name.setTitle(title);

@@ -37,8 +37,10 @@ import static java.sql.Types.NULL;
 public class NotificationBuilderActivity extends AppCompatActivity {
 
     private MessageAdapter adapter;
+    private FirebaseAuth mAuth;
     private DatabaseReference mRef;
     private RecyclerView recyclerView;
+
 
     private TextView title;
     private TextView description;
@@ -61,7 +63,8 @@ public class NotificationBuilderActivity extends AppCompatActivity {
 
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        mRef = database.getReference("CardList");
+        mRef = database.getReference("users");
+        mAuth = FirebaseAuth.getInstance();
 
         //Get recyclerView and adapter from other activity instance
         recyclerView = notificationActivity.getRecyclerView();
@@ -84,8 +87,7 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         String m_TextMessage = description.getText().toString();
         Card a = createCard(m_TextTitle, m_TextMessage);
         if (!a.getTitle().equals("") && !a.getMessage().equals("")) {
-            Log.d("bad","ha:"+a.getTitle());
-            mRef.child(m_TextTitle).setValue(a);
+            mRef.child(mAuth.getCurrentUser().getUid()).child(m_TextTitle).setValue(a);
             adapter.notifyDataSetChanged();
         }
         Log.d("bad","good");

@@ -52,6 +52,8 @@ public class LoginActivity extends BaseActivity implements
     // [START declare_auth]
     private FirebaseAuth mAuth;
     // [END declare_auth]
+    private String mCustomToken;
+
     Intent startMain;
 
     @Override
@@ -101,6 +103,7 @@ public class LoginActivity extends BaseActivity implements
     }
     // [END on_start_check_user]
 
+    ///Create account for Sign up
     private void createAccount(String email, String password) {
         View decorView = getWindow().getDecorView();
         // Hide the status bar.
@@ -245,6 +248,7 @@ public class LoginActivity extends BaseActivity implements
         return valid;
     }
 
+
     private void updateUI(FirebaseUser user) {
         hideProgressDialog();
         if (user != null) {
@@ -295,8 +299,11 @@ public class LoginActivity extends BaseActivity implements
 
     @Override
     public boolean onTouch(View v, MotionEvent event) {
-        InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        return true;
+        if (mEmailField.getVisibility()==View.GONE) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            return true;
+        }
+        else return false;
     }
 }
