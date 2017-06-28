@@ -23,7 +23,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.MyViewHo
         public MyViewHolder(View view) {
             super(view);
             //name = (TextView) view.findViewById(R.id.name);
-            message = (TextView) view.findViewById(R.id.commentText);
+            //message = (TextView) view.findViewById(R.id.commentText);
         }
     }
 

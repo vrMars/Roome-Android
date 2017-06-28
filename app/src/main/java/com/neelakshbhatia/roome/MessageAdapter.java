@@ -56,11 +56,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
         }
     }
 
-    public void animate(RecyclerView.ViewHolder viewHolder) {
-        final Animation animAnticipateOvershoot = AnimationUtils.loadAnimation(mContext, R.anim.bounce_interpolator);
-        viewHolder.itemView.setAnimation(animAnticipateOvershoot);
-    }
-
     @Override
     public int getItemCount() {
         return messageList.size();
