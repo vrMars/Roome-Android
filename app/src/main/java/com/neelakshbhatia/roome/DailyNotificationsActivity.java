@@ -1,17 +1,24 @@
 package com.neelakshbhatia.roome;
 
 import android.app.ActivityOptions;
+import android.app.ListActivity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.graphics.Rect;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -23,6 +30,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.transition.Explode;
 import android.util.Log;
 import android.util.TypedValue;
@@ -34,10 +42,12 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.AccelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
@@ -66,6 +76,7 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
     private List<Card> cardList;
     private ArrayList<String> mKeys = new ArrayList<>();
     private DatabaseReference mRef;
+    private SlideInUpAnimator animator;
 
     private Intent signOut;
     private Boolean alreadyRemoved = false;
@@ -108,34 +119,30 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         setSupportActionBar(myToolbar);
         myToolbar.setTitle("Home");
 
+        //Nav drawer
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, myToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        //Recycle view + adapter
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        SlideInRightAnimator animator = new SlideInRightAnimator(new OvershootInterpolator(0.5f));
-        recyclerView.setItemAnimator(animator);
         cardList = new ArrayList<>();
         adapter = new MessageAdapter(this, cardList);
 
         //RecyclerView for Cards setup
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(mLayoutManager);
-       /* RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
-        itemAnimator.setAddDuration(0);
-        itemAnimator.setRemoveDuration(0);
-
-        recyclerView.setItemAnimator(itemAnimator);
-        */
-       ScaleInAnimationAdapter slideAdapter = new ScaleInAnimationAdapter(adapter);
-        slideAdapter.setInterpolator(new AccelerateDecelerateInterpolator());
-        slideAdapter.setFirstOnly(true);
-        slideAdapter.setDuration(200);
 
         recyclerView.setAdapter(adapter);
 
+        //Swipe to delete functionality exp
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+
+        //Swipe to delete functionality
+        /*
         SwipeableRecyclerViewTouchListener swipeTouchListener =
                 new SwipeableRecyclerViewTouchListener(recyclerView,
                         new SwipeableRecyclerViewTouchListener.SwipeListener() {
@@ -205,9 +212,9 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
                                     adapter.notifyDataSetChanged();
                                 }
                             }
-                        });
+                        }); */
 
-        recyclerView.addOnItemTouchListener(swipeTouchListener);
+       // recyclerView.addOnItemTouchListener(swipeTouchListener);
 
         //Firebase shit
         mAuth = FirebaseAuth.getInstance();
@@ -253,7 +260,6 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
                     adapter.notifyItemRemoved(index);
                 }
                 alreadyRemoved = false;
-                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -290,6 +296,88 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
     private void prepareMessages(Card a) {
         cardList.add(a);
     }
+
+    ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+
+        // we want to cache these and not allocate anything repeatedly in the onChildDraw method
+        Drawable background;
+        Drawable xMark;
+        int xMarkMargin;
+        boolean initiated;
+
+        private void init() {
+            background = new ColorDrawable(Color.RED);
+            xMark = ContextCompat.getDrawable(DailyNotificationsActivity.this, R.drawable.ic_delete_sweep_white_24dp);
+            xMark.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+            xMarkMargin = (int) DailyNotificationsActivity.this.getResources().getDimension(R.dimen.ic_clear_margin);
+            initiated = true;
+        }
+
+        @Override
+        public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+            return false;
+        }
+
+        @Override
+        public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+            //Remove swiped item from list and notify the RecyclerView
+            int position = viewHolder.getAdapterPosition();
+
+            Query applesQuery = mRef.orderByChild("title").equalTo(cardList.get(position).getTitle());
+            applesQuery.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
+                        appleSnapshot.getRef().removeValue();
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    Log.e(TAG, "onCancelled", databaseError.toException());
+                }
+            });
+            cardList.remove(position);
+            alreadyRemoved = true;
+            Snackbar.make(recyclerView,"Deleted",Snackbar.LENGTH_SHORT).show();
+            adapter.notifyItemRemoved(position);
+        }
+
+        @Override
+        public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+            View itemView = viewHolder.itemView;
+
+            // not sure why, but this method get's called for viewholder that are already swiped away
+            if (viewHolder.getAdapterPosition() == -1) {
+                // not interested in those
+                return;
+            }
+
+            if (!initiated) {
+                init();
+            }
+
+            // draw red background
+            background.setBounds(itemView.getRight() + (int) dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+            background.draw(c);
+
+            // draw x mark
+            int itemHeight = itemView.getBottom() - itemView.getTop();
+            int intrinsicWidth = xMark.getIntrinsicWidth();
+            int intrinsicHeight = xMark.getIntrinsicWidth();
+
+            int xMarkLeft = itemView.getRight() - xMarkMargin - intrinsicWidth;
+            int xMarkRight = itemView.getRight() - xMarkMargin;
+            int xMarkTop = itemView.getTop() + (itemHeight - intrinsicHeight)/2;
+            int xMarkBottom = xMarkTop + intrinsicHeight;
+            xMark.setBounds(xMarkLeft, xMarkTop, xMarkRight, xMarkBottom);
+
+            xMark.draw(c);
+
+            super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+        }
+
+    };
 
     private Card createCard(String title, String message){
         Card name = new Card();
