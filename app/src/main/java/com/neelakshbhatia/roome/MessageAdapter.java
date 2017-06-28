@@ -53,7 +53,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
         if (!card.getTitle().equals("") && !card.getMessage().equals("")) {
             holder.title.setText(card.getTitle());
             holder.message.setText(card.getMessage());
-            //animate(holder);
         }
     }
 

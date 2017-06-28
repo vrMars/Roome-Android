@@ -33,6 +33,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -54,6 +55,9 @@ import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.SlideInRightAnimationAdapter;
+import jp.wasabeef.recyclerview.animators.FadeInRightAnimator;
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
+import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 
@@ -111,7 +115,8 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         toggle.syncState();
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        recyclerView.setItemAnimator(new SlideInUpAnimator());
+        SlideInRightAnimator animator = new SlideInRightAnimator(new OvershootInterpolator(0.5f));
+        recyclerView.setItemAnimator(animator);
         cardList = new ArrayList<>();
         adapter = new MessageAdapter(this, cardList);
 
@@ -125,10 +130,11 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         recyclerView.setItemAnimator(itemAnimator);
         */
        ScaleInAnimationAdapter slideAdapter = new ScaleInAnimationAdapter(adapter);
-        slideAdapter.setInterpolator(new OvershootInterpolator());
+        slideAdapter.setInterpolator(new AccelerateDecelerateInterpolator());
+        slideAdapter.setFirstOnly(true);
         slideAdapter.setDuration(200);
 
-        recyclerView.setAdapter(slideAdapter);
+        recyclerView.setAdapter(adapter);
 
         SwipeableRecyclerViewTouchListener swipeTouchListener =
                 new SwipeableRecyclerViewTouchListener(recyclerView,
@@ -244,11 +250,10 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
                 mKeys.remove(key);
                 if (!alreadyRemoved) {
                     cardList.remove(index);
+                    adapter.notifyItemRemoved(index);
                 }
                 alreadyRemoved = false;
                 adapter.notifyDataSetChanged();
-
-
             }
 
             @Override
