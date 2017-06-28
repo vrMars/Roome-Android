@@ -183,8 +183,10 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
                 if (!alreadyRemoved) {
                     cardList.remove(index);
                     adapter.notifyItemRemoved(index);
+                    Log.d("logged","loggedChildremovedALreadyFalse");
                 }
                 alreadyRemoved = false;
+                Log.d("logged", String.valueOf(alreadyRemoved));
             }
 
             @Override
@@ -262,10 +264,11 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
                     Log.e(TAG, "onCancelled", databaseError.toException());
                 }
             });
-            cardList.remove(position);
             alreadyRemoved = true;
+            cardList.remove(position);
             Snackbar.make(recyclerView,"Deleted",Snackbar.LENGTH_SHORT).show();
             adapter.notifyItemRemoved(position);
+            Log.d("logTAG","loggedOnSwipeRemove");
         }
 
         @Override
