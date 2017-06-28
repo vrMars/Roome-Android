@@ -21,6 +21,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SimpleItemAnimator;
 import android.support.v7.widget.Toolbar;
 import android.transition.Explode;
 import android.util.Log;
@@ -30,6 +31,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -55,7 +57,7 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
     private DatabaseReference mRef;
 
     private Intent signOut;
-
+    private Boolean alreadyRemoved = false;
     private FloatingActionButton fab;
 
     private FirebaseAuth mAuth;
@@ -106,13 +108,13 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         cardList = new ArrayList<>();
         adapter = new MessageAdapter(this, cardList);
 
-        adapter.notifyDataSetChanged();
-
         //RecyclerView for Cards setup
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(1, dpToPx(5), true));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
+        itemAnimator.setAddDuration(0);
+        itemAnimator.setRemoveDuration(0);
+        recyclerView.setItemAnimator(itemAnimator);
         recyclerView.setAdapter(adapter);
 
         SwipeableRecyclerViewTouchListener swipeTouchListener =
@@ -152,11 +154,11 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
                                         }
                                     });
                                     cardList.remove(position);
+                                    alreadyRemoved = true;
                                     Snackbar.make(recyclerView,"Deleted :)",Snackbar.LENGTH_SHORT).show();
                                     rmPosition = position;
                                     adapter.notifyItemRemoved(position);
                                 }
-                                adapter.notifyDataSetChanged();
                             }
 
                             @Override
@@ -177,12 +179,12 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
                                         }
                                     });
                                     cardList.remove(position);
+                                    alreadyRemoved = true;
                                     Snackbar.make(recyclerView,"Deleted :)",Snackbar.LENGTH_SHORT).show();
                                     rmPosition = position;
-                                    adapter.notifyItemRemoved(position);
                                     indexKey--;
+                                    adapter.notifyItemRemoved(position);
                                 }
-                                adapter.notifyDataSetChanged();
                             }
                         });
 
@@ -223,11 +225,15 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                Card rmVal = dataSnapshot.getValue(Card.class);
                 String key = dataSnapshot.getKey();
                 int index = mKeys.indexOf(key);
                 mKeys.remove(key);
-                adapter.notifyDataSetChanged();
+                if (!alreadyRemoved) {
+                    cardList.remove(index);
+                }
+                alreadyRemoved = false;
+
+                adapter.notifyItemRemoved(index);
             }
 
             @Override
