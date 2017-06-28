@@ -33,6 +33,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.Window;
+import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -48,6 +49,12 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
+import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
+import jp.wasabeef.recyclerview.adapters.SlideInRightAnimationAdapter;
+import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 
 public class DailyNotificationsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -104,18 +111,24 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         toggle.syncState();
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-
+        recyclerView.setItemAnimator(new SlideInUpAnimator());
         cardList = new ArrayList<>();
         adapter = new MessageAdapter(this, cardList);
 
         //RecyclerView for Cards setup
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(mLayoutManager);
-        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
+       /* RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
         itemAnimator.setAddDuration(0);
         itemAnimator.setRemoveDuration(0);
+
         recyclerView.setItemAnimator(itemAnimator);
-        recyclerView.setAdapter(adapter);
+        */
+       ScaleInAnimationAdapter slideAdapter = new ScaleInAnimationAdapter(adapter);
+        slideAdapter.setInterpolator(new OvershootInterpolator());
+        slideAdapter.setDuration(200);
+
+        recyclerView.setAdapter(slideAdapter);
 
         SwipeableRecyclerViewTouchListener swipeTouchListener =
                 new SwipeableRecyclerViewTouchListener(recyclerView,
@@ -157,7 +170,7 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
                                     alreadyRemoved = true;
                                     Snackbar.make(recyclerView,"Deleted :)",Snackbar.LENGTH_SHORT).show();
                                     rmPosition = position;
-                                    adapter.notifyItemRemoved(position);
+                                    adapter.notifyDataSetChanged();
                                 }
                             }
 
@@ -183,7 +196,7 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
                                     Snackbar.make(recyclerView,"Deleted :)",Snackbar.LENGTH_SHORT).show();
                                     rmPosition = position;
                                     indexKey--;
-                                    adapter.notifyItemRemoved(position);
+                                    adapter.notifyDataSetChanged();
                                 }
                             }
                         });
@@ -210,8 +223,9 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
 
                     value = dataSnapshot.getValue(Card.class);
                     mKeys.add(dataSnapshot.getKey());
+                    int index = mKeys.indexOf(dataSnapshot.getKey());
                     prepareMessages(value);
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyItemInserted(index);
             }
 
             @Override
@@ -220,7 +234,7 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
                     String key = dataSnapshot.getKey();
                     int index = mKeys.indexOf(key);
                     cardList.set(index, newVal);
-                    adapter.notifyDataSetChanged();
+                    adapter.notifyItemChanged(index);
             }
 
             @Override
@@ -232,8 +246,9 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
                     cardList.remove(index);
                 }
                 alreadyRemoved = false;
+                adapter.notifyDataSetChanged();
 
-                adapter.notifyItemRemoved(index);
+
             }
 
             @Override
