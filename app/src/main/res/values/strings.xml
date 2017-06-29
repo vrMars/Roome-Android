@@ -25,6 +25,13 @@
     <string name="label_firebase_ui">FirebaseUI Auth</string>
     <string name="desc_firebase_ui">Use the FirebaseUI-Android library to authenticate with Firebase.</string>
 
+    <string name="card_option_prompt">Choose the type of message...</string>
+    <string-array name="card_options">
+        <item>Message</item>
+        <item>Reminder</item>
+        <item>Poll</item>
+    </string-array>
+
     <string name="hint_user_id">User ID</string>
     <string name="Continue">Continue</string>
     <string name="get_custom_token">Get Token</string>

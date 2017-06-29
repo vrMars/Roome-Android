@@ -5,6 +5,7 @@ package com.neelakshbhatia.roome;
  */
 
 public class Card {
+    private String type;
     private String title;
     private String message;
     private String date;
@@ -12,10 +13,19 @@ public class Card {
     public Card() {
     }
 
-    public Card(String title, String message, String date) {
+    public Card(String type, String title, String message, String date) {
+        this.type = type;
         this.title = title;
         this.message = message;
         this.date = date;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getTitle() {

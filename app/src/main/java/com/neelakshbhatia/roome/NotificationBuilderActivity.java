@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.firebase.database.DatabaseReference;
@@ -44,7 +45,7 @@ public class NotificationBuilderActivity extends AppCompatActivity {
 
     private TextView title;
     private TextView description;
-
+    private Spinner card_options_spinner;
 
     private DailyNotificationsActivity notificationActivity;
 
@@ -58,9 +59,11 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        card_options_spinner = (Spinner) findViewById(R.id.card_options_spinner);
+        card_options_spinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+
         title = (EditText) findViewById(R.id.title_editText);
         description = (EditText) findViewById(R.id.description_editText);
-
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mRef = database.getReference("users");
@@ -71,26 +74,38 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         adapter = notificationActivity.getAdapter();
     }
 
-    private Card createCard(String title, String message){
+    private Card createCard(String type, String title, String message){
             Card name = new Card();
+            name.setType(type);
             name.setTitle(title);
             name.setDate(String.valueOf(DATE));
             name.setMessage(message);
             return name;
     }
 
+    public String convertTypeToEmoji (String x){
+        if (x.equals("Reminder")){
+            return new String(Character.toChars(0x2705));
+        }
+        else if (x.equals("Poll")){
+            return new String(Character.toChars(0x2754));
+        }
+        else{
+            return new String(Character.toChars(0x2709));
+        }
+    }
 
     @Override
     public void onPause() {
         super.onPause();
+        String m_TextType = String.valueOf(card_options_spinner.getSelectedItem());
         String m_TextTitle = title.getText().toString();
         String m_TextMessage = description.getText().toString();
-        Card a = createCard(m_TextTitle, m_TextMessage);
+        Card a = createCard(m_TextType,m_TextTitle, m_TextMessage);
         if (!a.getTitle().equals("") && !a.getMessage().equals("")) {
             mRef.child(mAuth.getCurrentUser().getUid()).child(m_TextTitle).setValue(a);
             adapter.notifyDataSetChanged();
         }
-        Log.d("bad","good");
         onLeaveThisActivity();
     }
 

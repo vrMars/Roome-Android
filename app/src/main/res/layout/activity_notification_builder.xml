@@ -45,6 +45,18 @@
         android:layout_alignParentStart="true"
         android:layout_margin="50dp" />
 
+    <Spinner
+        android:id="@+id/card_options_spinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="false"
+        android:entries="@array/card_options"
+        android:prompt="@string/card_option_prompt"
+        android:layout_centerHorizontal="true"
+        android:layout_weight="1"
+        android:layout_alignTop="@+id/title_editText"
+        android:layout_marginTop="50dp" />
+
 
 </RelativeLayout>
 
