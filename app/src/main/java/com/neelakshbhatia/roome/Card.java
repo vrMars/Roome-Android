@@ -2,6 +2,8 @@ package com.neelakshbhatia.roome;
 
 import android.widget.ListView;
 
+import java.util.ArrayList;
+
 /**
  * Created by neelakshbhatia on 2017-05-24.
  */
@@ -11,17 +13,17 @@ public class Card {
     private String title;
     private String message;
     private String date;
-    private ListView remindersListView;
+    private ArrayList<String> reminderArray;
 
     public Card() {
     }
 
-    public Card(String type, String title, String message, String date,ListView reminderListView) {
+    public Card(String type, String title, String message, String date,ArrayList<String> reminderArray) {
         this.type = type;
         this.title = title;
         this.message = message;
         this.date = date;
-        this.remindersListView = reminderListView;
+        this.reminderArray = reminderArray;
     }
 
     public String getType() {
@@ -56,11 +58,11 @@ public class Card {
         this.date = date;
     }
 
-    public ListView getListView() {
-        return remindersListView;
+    public ArrayList<String> getReminderArray() {
+        return reminderArray;
     }
 
-    public void setListView(ListView remindersListView) {
-        this.remindersListView = remindersListView;
+    public void setReminderArray(ArrayList<String> reminderArray) {
+        this.reminderArray = reminderArray;
     }
 }

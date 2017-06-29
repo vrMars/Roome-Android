@@ -49,6 +49,8 @@ public class NotificationBuilderActivity extends AppCompatActivity {
     private DatabaseReference mRef;
     public static Button addButton;
     public static ListView reminderList;
+    public static ArrayList<String> m_ReminderArray;
+
     private RecyclerView recyclerView;
     public static int count;
 
@@ -88,7 +90,6 @@ public class NotificationBuilderActivity extends AppCompatActivity {
 
         //Get recyclerView and adapter from other activity instance
         recyclerView = notificationActivity.getRecyclerView();
-        adapter = notificationActivity.getAdapter();
         arrayList = new ArrayList<String>();
         listAdapter = new ArrayAdapter<String>(NotificationBuilderActivity.this, R.layout.reminder_list_item,
                 arrayList);
@@ -134,13 +135,13 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         reminderList.setOnTouchListener(touchListener);
     }
 
-    private Card createCard(String type, String title, String message, ListView listView){
+    private Card createCard(String type, String title, String message, ArrayList<String> reminderArray){
             Card name = new Card();
             name.setType(type);
             name.setTitle(title);
             name.setDate(String.valueOf(DATE));
             name.setMessage(message);
-            name.setListView(listView);
+            name.setReminderArray(reminderArray);
             return name;
     }
 
@@ -164,9 +165,10 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         String m_TextType = String.valueOf(card_options_spinner.getSelectedItem());
         String m_TextTitle = title.getText().toString();
         String m_TextMessage = description.getText().toString();
-        ListView m_ListView = reminderList;
-        Card a = createCard(m_TextType,m_TextTitle, m_TextMessage, m_ListView);
+        ArrayList <String> m_ReminderArray = arrayList;
+        Card a = createCard(m_TextType,m_TextTitle, m_TextMessage, m_ReminderArray);
         if (!a.getTitle().equals("")) {
+            adapter = notificationActivity.getAdapter();
             mRef.child(mAuth.getCurrentUser().getUid()).child(m_TextTitle).setValue(a);
             adapter.notifyDataSetChanged();
         }

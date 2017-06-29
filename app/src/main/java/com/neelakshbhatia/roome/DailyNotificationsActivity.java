@@ -85,9 +85,9 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
     private FloatingActionButton fab;
 
     private FirebaseAuth mAuth;
-    private ListView reminderView;
+    private ArrayList<String> reminder_array;
 
-    Card value = new Card("","","","",reminderView);
+    Card value = new Card("","","","",reminder_array);
     int rmPosition;
     int indexKey;
     private String m_TextTitle = "";

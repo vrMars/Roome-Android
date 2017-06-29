@@ -42,7 +42,7 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingTop="10dp"
-                    android:paddingBottom="30dp"
+                    android:paddingBottom="10dp"
                     android:textColor="#f5f5f5"
                     android:layout_centerInParent="false"
                     android:gravity="center"
@@ -64,7 +64,7 @@
                 <ListView
                     android:id="@+id/reminder_list_view"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_below="@id/title"
                     />
 

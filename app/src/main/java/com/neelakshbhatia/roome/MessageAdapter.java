@@ -19,13 +19,13 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+
 /**
  * Created by neelakshbhatia on 2017-05-24.
  */
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHolder> {
     private List<Card> messageList;
-    public ListView reminderListView;
     private Context mContext;
     private String cardOption = "";
     private int lastPosition = -1;
@@ -35,6 +35,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
         public CardView parentCard;
         public Spinner cardType;
         public TextView title, message, type;
+        public ListView reminderArrayListView;
 
         public MyViewHolder(View view) {
             super(view);
@@ -44,7 +45,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
             type = (TextView) view.findViewById(R.id.type);
             title = (TextView) view.findViewById(R.id.title);
             message = (TextView) view.findViewById(R.id.count);
-            reminderListView = (ListView) view.findViewById(R.id.reminder_list_view);
+            reminderArrayListView = (ListView) view.findViewById(R.id.reminder_list_view);
         }
     }
 
@@ -68,6 +69,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                 holder.parentCard.setCardBackgroundColor(Color.parseColor("#b71c1c"));
                 holder.parentCard.setRadius(70);
                 holder.parentCard.getLayoutParams().height = CardView.LayoutParams.WRAP_CONTENT;
+                ArrayList<String> reminderArray = card.getReminderArray();
+                ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(mContext, R.layout.reminder_list_item,
+                        reminderArray);
+                holder.reminderArrayListView.setAdapter(listAdapter);
             }
             else if (card.getType().equals("Poll")){
                 holder.parentCard.setCardBackgroundColor(Color.parseColor("#546e7a"));
