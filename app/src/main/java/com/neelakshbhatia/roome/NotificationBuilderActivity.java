@@ -3,6 +3,7 @@ package com.neelakshbhatia.roome;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,8 +13,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -28,7 +33,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.Console;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicMarkableReference;
 
 import static java.sql.Types.DATE;
@@ -40,15 +47,20 @@ public class NotificationBuilderActivity extends AppCompatActivity {
     private MessageAdapter adapter;
     private FirebaseAuth mAuth;
     private DatabaseReference mRef;
+    private Button addButton;
+    private ListView reminderList;
     private RecyclerView recyclerView;
+    private int count;
 
+
+    private ArrayList<String> arrayList;
+    private ArrayAdapter<String> listAdapter;
 
     private TextView title;
     private TextView description;
     private Spinner card_options_spinner;
 
     private DailyNotificationsActivity notificationActivity;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +74,9 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         card_options_spinner = (Spinner) findViewById(R.id.card_options_spinner);
         card_options_spinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
 
+        addButton = (Button) findViewById(R.id.addButton);
+        reminderList = (ListView) findViewById(R.id.reminder_listView);
+
         title = (EditText) findViewById(R.id.title_editText);
         description = (EditText) findViewById(R.id.description_editText);
 
@@ -72,6 +87,48 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         //Get recyclerView and adapter from other activity instance
         recyclerView = notificationActivity.getRecyclerView();
         adapter = notificationActivity.getAdapter();
+        arrayList = new ArrayList<String>();
+        listAdapter = new ArrayAdapter<String>(NotificationBuilderActivity.this, R.layout.reminder_list_item,
+                arrayList);
+        reminderList.setAdapter(listAdapter);
+
+        addButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("count",String.valueOf(count));
+                if (count<6) {
+                    addButton.setEnabled(true);
+                    String result = String.valueOf(description.getText());
+                    arrayList.add(result);
+                    listAdapter.notifyDataSetChanged();
+                    count++;
+                }
+                if (count ==6){
+                    addButton.setEnabled(false);
+                }
+            }
+        });
+
+        SwipeDismissListViewTouchListener touchListener =
+                new SwipeDismissListViewTouchListener(
+                        reminderList,
+                        new SwipeDismissListViewTouchListener.DismissCallbacks() {
+                            @Override
+                            public boolean canDismiss(int position) {
+                                return true;
+                            }
+
+                            @Override
+                            public void onDismiss(ListView listView, int[] reverseSortedPositions) {
+                                for (int position : reverseSortedPositions) {
+                                    count--;
+                                    addButton.setEnabled(true);
+                                    arrayList.remove(position);
+                                    listAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        });
+        reminderList.setOnTouchListener(touchListener);
     }
 
     private Card createCard(String type, String title, String message){
