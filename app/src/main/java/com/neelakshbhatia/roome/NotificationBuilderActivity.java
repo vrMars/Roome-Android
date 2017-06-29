@@ -47,18 +47,19 @@ public class NotificationBuilderActivity extends AppCompatActivity {
     private MessageAdapter adapter;
     private FirebaseAuth mAuth;
     private DatabaseReference mRef;
-    private Button addButton;
-    private ListView reminderList;
+    public static Button addButton;
+    public static ListView reminderList;
     private RecyclerView recyclerView;
-    private int count;
+    public static int count;
 
 
     private ArrayList<String> arrayList;
     private ArrayAdapter<String> listAdapter;
 
-    private TextView title;
-    private TextView description;
-    private Spinner card_options_spinner;
+    public static TextView title;
+    public static TextView description;
+    public static TextView reminder_text_view;
+    public static Spinner card_options_spinner;
 
     private DailyNotificationsActivity notificationActivity;
 
@@ -76,6 +77,7 @@ public class NotificationBuilderActivity extends AppCompatActivity {
 
         addButton = (Button) findViewById(R.id.addButton);
         reminderList = (ListView) findViewById(R.id.reminder_listView);
+        reminder_text_view = (TextView) findViewById(R.id.reminder_text_view);
 
         title = (EditText) findViewById(R.id.title_editText);
         description = (EditText) findViewById(R.id.description_editText);
@@ -98,7 +100,8 @@ public class NotificationBuilderActivity extends AppCompatActivity {
                 Log.d("count",String.valueOf(count));
                 if (count<6) {
                     addButton.setEnabled(true);
-                    String result = String.valueOf(description.getText());
+                    String result = String.valueOf(reminder_text_view.getText());
+                    reminder_text_view.setText("");
                     arrayList.add(result);
                     listAdapter.notifyDataSetChanged();
                     count++;
@@ -155,6 +158,7 @@ public class NotificationBuilderActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
+        count = 0;
         String m_TextType = String.valueOf(card_options_spinner.getSelectedItem());
         String m_TextTitle = title.getText().toString();
         String m_TextMessage = description.getText().toString();

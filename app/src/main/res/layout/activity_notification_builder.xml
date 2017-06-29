@@ -43,6 +43,7 @@
         android:hint="Description"
         android:layout_below="@+id/title_editText"
         android:layout_alignParentStart="true"
+        android:visibility="gone"
         android:layout_margin="30dp" />
 
     <Spinner
@@ -66,23 +67,34 @@
         android:layout_marginTop="50dp"
         android:layout_alignTop="@+id/title_editText" />
 
+    <AutoCompleteTextView
+        android:id="@+id/reminder_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Enter reminders..."
+        android:paddingTop="30dp"
+        android:layout_alignTop="@+id/card_options_spinner"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+         />
+
     <Button
         android:id="@+id/addButton"
-        android:text="Add New Item"
+        android:text="Add"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:visibility="visible"
+        android:visibility="gone"
         android:onClick="onButtonClick"
-        android:layout_below="@id/title_editText"
+        android:layout_below="@id/reminder_text_view"
         />
-
     <ListView
         android:id="@+id/reminder_listView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawSelectorOnTop="false"
         android:layout_below="@id/addButton"
-        android:visibility="visible" />
+        android:visibility="gone" />
+
 
 </RelativeLayout>
 
