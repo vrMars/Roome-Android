@@ -58,15 +58,6 @@
         android:layout_alignTop="@+id/title_editText"
         android:layout_marginTop="50dp" />
 
-    <Spinner
-        android:id="@+id/reminders_quantity_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="false"
-        android:visibility="gone"
-        android:layout_marginTop="50dp"
-        android:layout_alignTop="@+id/title_editText" />
-
     <AutoCompleteTextView
         android:id="@+id/reminder_text_view"
         android:layout_width="match_parent"

@@ -10,10 +10,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,6 +25,7 @@ import java.util.List;
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHolder> {
     private List<Card> messageList;
+    public ListView reminderListView;
     private Context mContext;
     private String cardOption = "";
     private int lastPosition = -1;
@@ -40,6 +44,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
             type = (TextView) view.findViewById(R.id.type);
             title = (TextView) view.findViewById(R.id.title);
             message = (TextView) view.findViewById(R.id.count);
+            reminderListView = (ListView) view.findViewById(R.id.reminder_list_view);
         }
     }
 
@@ -58,7 +63,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     @Override
     public void onBindViewHolder(final MyViewHolder holder, int position) {
         Card card = messageList.get(position);
-        if (!card.getTitle().equals("") && !card.getMessage().equals("")) {
+        if (!card.getTitle().equals("")) {
             if (card.getType().equals("Reminder")) {
                 holder.parentCard.setCardBackgroundColor(Color.parseColor("#b71c1c"));
                 holder.parentCard.setRadius(70);

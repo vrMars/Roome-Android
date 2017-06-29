@@ -48,6 +48,7 @@ import android.view.animation.OvershootInterpolator;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -84,8 +85,9 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
     private FloatingActionButton fab;
 
     private FirebaseAuth mAuth;
+    private ListView reminderView;
 
-    Card value = new Card("","","","");
+    Card value = new Card("","","","",reminderView);
     int rmPosition;
     int indexKey;
     private String m_TextTitle = "";

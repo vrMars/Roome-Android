@@ -134,12 +134,13 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         reminderList.setOnTouchListener(touchListener);
     }
 
-    private Card createCard(String type, String title, String message){
+    private Card createCard(String type, String title, String message, ListView listView){
             Card name = new Card();
             name.setType(type);
             name.setTitle(title);
             name.setDate(String.valueOf(DATE));
             name.setMessage(message);
+            name.setListView(listView);
             return name;
     }
 
@@ -155,6 +156,7 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         }
     }
 
+    //CANT STORE LIST_VIEW iN FIREBASE REFACTOR TO STORE ARRAY!
     @Override
     public void onPause() {
         super.onPause();
@@ -162,8 +164,9 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         String m_TextType = String.valueOf(card_options_spinner.getSelectedItem());
         String m_TextTitle = title.getText().toString();
         String m_TextMessage = description.getText().toString();
-        Card a = createCard(m_TextType,m_TextTitle, m_TextMessage);
-        if (!a.getTitle().equals("") && !a.getMessage().equals("")) {
+        ListView m_ListView = reminderList;
+        Card a = createCard(m_TextType,m_TextTitle, m_TextMessage, m_ListView);
+        if (!a.getTitle().equals("")) {
             mRef.child(mAuth.getCurrentUser().getUid()).child(m_TextTitle).setValue(a);
             adapter.notifyDataSetChanged();
         }
