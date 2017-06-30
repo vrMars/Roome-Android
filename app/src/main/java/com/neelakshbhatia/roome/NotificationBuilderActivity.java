@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.design.widget.CheckableImageButton;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -16,6 +17,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckedTextView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -50,15 +52,13 @@ public class NotificationBuilderActivity extends AppCompatActivity {
     private DatabaseReference mRef;
     public static Button addButton;
     public static ListView reminderList;
-    public static ArrayList<String> m_ReminderArray;
 
     private RecyclerView recyclerView;
     public static int count;
 
 
-    private ArrayList<String> arrayList;
-    private ArrayList<Boolean> checkedTextBoxList;
-    private ArrayAdapter<String> listAdapter;
+    private ArrayList<CheckedReminderList> arrayList;
+    private ArrayAdapter<CheckedReminderList> listAdapter;
 
     public static TextView title;
     public static TextView description;
@@ -92,10 +92,9 @@ public class NotificationBuilderActivity extends AppCompatActivity {
 
         //Get recyclerView and adapter from other activity instance
         recyclerView = notificationActivity.getRecyclerView();
-        arrayList = new ArrayList<String>();
-        checkedTextBoxList = new ArrayList<Boolean>();
+        arrayList = new ArrayList<CheckedReminderList>();
 
-        listAdapter = new ArrayAdapter<String>(NotificationBuilderActivity.this, R.layout.reminder_list_item,
+        listAdapter = new ArrayAdapter<CheckedReminderList>(NotificationBuilderActivity.this, R.layout.reminder_list_item,
                 arrayList);
         reminderList.setAdapter(listAdapter);
 
@@ -107,8 +106,7 @@ public class NotificationBuilderActivity extends AppCompatActivity {
                     addButton.setEnabled(true);
                     String result = String.valueOf(reminder_text_view.getText());
                     reminder_text_view.setText("");
-                    arrayList.add(result);
-                    checkedTextBoxList.add(false);
+                    arrayList.add(new CheckedReminderList(result,true));
                     listAdapter.notifyDataSetChanged();
                     count++;
                 }
@@ -133,7 +131,6 @@ public class NotificationBuilderActivity extends AppCompatActivity {
                                     count--;
                                     addButton.setEnabled(true);
                                     arrayList.remove(position);
-                                    checkedTextBoxList.remove(position);
                                     listAdapter.notifyDataSetChanged();
                                 }
                             }
@@ -141,14 +138,13 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         reminderList.setOnTouchListener(touchListener);
     }
 
-    private Card createCard(String type, String title, String message, ArrayList<String> reminderArray, ArrayList<Boolean> checkBoxReminderArray){
+    private Card createCard(String type, String title, String message, ArrayList<CheckedReminderList> reminderArray){
             Card name = new Card();
             name.setType(type);
             name.setTitle(title);
             name.setDate(String.valueOf(DATE));
             name.setMessage(message);
             name.setReminderArray(reminderArray);
-            name.setCheckBoxReminderArray(checkBoxReminderArray);
             return name;
     }
 
@@ -172,9 +168,8 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         String m_TextType = String.valueOf(card_options_spinner.getSelectedItem());
         String m_TextTitle = title.getText().toString();
         String m_TextMessage = description.getText().toString();
-        ArrayList <String> m_ReminderArray = arrayList;
-        ArrayList <Boolean> m_CheckBoxReminderArray = checkedTextBoxList;
-        Card a = createCard(m_TextType,m_TextTitle, m_TextMessage, m_ReminderArray, m_CheckBoxReminderArray);
+        ArrayList <CheckedReminderList> m_ReminderArray = arrayList;
+        Card a = createCard(m_TextType,m_TextTitle, m_TextMessage, m_ReminderArray);
         if (!a.getTitle().equals("")) {
             adapter = notificationActivity.getAdapter();
             mRef.child(mAuth.getCurrentUser().getUid()).child(m_TextTitle).setValue(a);

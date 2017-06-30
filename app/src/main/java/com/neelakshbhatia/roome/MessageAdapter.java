@@ -2,6 +2,7 @@ package com.neelakshbhatia.roome;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.res.ObbInfo;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.media.Image;
@@ -37,6 +38,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static android.content.ContentValues.TAG;
 
@@ -94,16 +96,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                 holder.parentCard.setRadius(70);
                 int height = card.getReminderArray().size();
                 holder.parentCard.getLayoutParams().height = (int)convertDpToPixel(150+(height * 35));
-                //CUSTOM OBJECT ARRAY, with stirng + bool
-                final ArrayList<String> reminderArray = card.getReminderArray();
-                final ArrayList<Boolean> checkBoxReminderArray = card.getCheckBoxReminderArray();
-                final ArrayAdapter<Boolean> listAdapter = new ArrayAdapter<Boolean>(mContext,
-                       R.layout.mult_choice_checkbox, checkBoxReminderArray);
+                //CUSTOM ADAPTER!!!
+                //TODO: CUSTOM ARRAY ADAPTER
+                final ArrayList<CheckedReminderList> reminderArray = card.getReminderArray();
+                final CheckedRemindersListAdapter listAdapter = new CheckedRemindersListAdapter(mContext,
+                       reminderArray);
                 holder.reminderArrayListView.setAdapter(listAdapter);
                 holder.reminderArrayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        checkBoxReminderArray.set(position,true);
                     }
                 });
             }

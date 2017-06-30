@@ -13,19 +13,17 @@ public class Card {
     private String title;
     private String message;
     private String date;
-    private ArrayList<String> reminderArray;
-    private ArrayList<Boolean> checkBoxReminderArray;
+    private ArrayList<CheckedReminderList> reminderArray;
 
     public Card() {
     }
 
-    public Card(String type, String title, String message, String date,ArrayList<String> reminderArray, ArrayList<Boolean> checkBoxReminderArray) {
+    public Card(String type, String title, String message, String date, ArrayList<CheckedReminderList> reminderArray) {
         this.type = type;
         this.title = title;
         this.message = message;
         this.date = date;
         this.reminderArray = reminderArray;
-        this.checkBoxReminderArray = checkBoxReminderArray;
     }
 
     public String getType() {
@@ -60,19 +58,11 @@ public class Card {
         this.date = date;
     }
 
-    public ArrayList<String> getReminderArray() {
+    public ArrayList<CheckedReminderList> getReminderArray() {
         return reminderArray;
     }
 
-    public void setReminderArray(ArrayList<String> reminderArray) {
+    public void setReminderArray(ArrayList<CheckedReminderList> reminderArray) {
         this.reminderArray = reminderArray;
-    }
-
-    public ArrayList<Boolean> getCheckBoxReminderArray() {
-        return checkBoxReminderArray;
-    }
-
-    public void setCheckBoxReminderArray(ArrayList<Boolean> checkBoxReminderArray) {
-        this.checkBoxReminderArray = checkBoxReminderArray;
     }
 }

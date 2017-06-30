@@ -86,11 +86,10 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
     private FloatingActionButton fab;
 
     private FirebaseAuth mAuth;
-    private ArrayList<String> reminder_array;
-    private ArrayList<Boolean> checkBoxReminder_array;
+    private ArrayList<CheckedReminderList> reminder_array;
 
 
-    Card value = new Card("","","","",reminder_array, checkBoxReminder_array);
+    Card value = new Card("","","","",reminder_array);
     int rmPosition;
     int indexKey;
     private String m_TextTitle = "";
