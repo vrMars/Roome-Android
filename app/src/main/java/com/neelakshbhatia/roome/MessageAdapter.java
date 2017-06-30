@@ -2,15 +2,20 @@ package com.neelakshbhatia.roome;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.media.Image;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckedTextView;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -29,6 +34,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     private Context mContext;
     private String cardOption = "";
     private int lastPosition = -1;
+    public CheckedTextView reminderListTextView;
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         //Textviews from Card
@@ -46,7 +53,24 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
             title = (TextView) view.findViewById(R.id.title);
             message = (TextView) view.findViewById(R.id.count);
             reminderArrayListView = (ListView) view.findViewById(R.id.reminder_list_view);
-        }
+            reminderListTextView = (CheckedTextView) view.findViewById(R.id.reminder_list_item);
+
+            reminderArrayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        if (reminderArrayListView.isChecked()) {
+                            // set check mark drawable and set checked property to false
+                            reminderListTextView.setCheckMarkDrawable(0);
+                            reminderListTextView.setChecked(false);
+                        } else {
+                            // set check mark drawable and set checked property to true
+                            reminderListTextView.setCheckMarkDrawable(R.mipmap.ic_check_white_24dp);
+                            reminderListTextView.setChecked(true);
+                        }
+                    }
+                });
+            }
     }
 
     public MessageAdapter(Context mContext, List<Card> messageList) {
@@ -58,6 +82,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.message_card, parent, false);
+        // perform on Click Event Listener on CheckedTextView
         return new MyViewHolder(itemView);
     }
 
@@ -68,7 +93,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
             if (card.getType().equals("Reminder")) {
                 holder.parentCard.setCardBackgroundColor(Color.parseColor("#b71c1c"));
                 holder.parentCard.setRadius(70);
-                holder.parentCard.getLayoutParams().height = CardView.LayoutParams.WRAP_CONTENT;
+                int height = card.getReminderArray().size();
+                holder.parentCard.getLayoutParams().height = (int)convertDpToPixel(150+(height * 40));
                 ArrayList<String> reminderArray = card.getReminderArray();
                 ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(mContext, R.layout.reminder_list_item,
                         reminderArray);
@@ -84,6 +110,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
             holder.title.setText(card.getTitle());
             holder.message.setText(card.getMessage());
         }
+    }
+
+    public static float convertDpToPixel(float dp){
+        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
+        float px = dp * (metrics.densityDpi / 160f);
+        return Math.round(px);
     }
 
     @Override

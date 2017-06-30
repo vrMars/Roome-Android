@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<TextView
+<CheckedTextView
     android:id="@+id/reminder_list_item"
     android:layout_width="match_parent"
+    android:textColor="@android:color/background_light"
     android:layout_height="wrap_content"
     android:textAppearance="?android:attr/textAppearanceListItemSmall"
     android:gravity="center_vertical"
@@ -10,4 +11,6 @@
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:windowSoftInputMode="adjustPan"
     android:isScrollContainer="true"
+    android:checkMark="@mipmap/ic_check_white_24dp"
+    android:checked="true"
     xmlns:android="http://schemas.android.com/apk/res/android" />
