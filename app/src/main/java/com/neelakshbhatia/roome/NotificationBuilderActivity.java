@@ -33,6 +33,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.io.Console;
+import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -56,6 +57,7 @@ public class NotificationBuilderActivity extends AppCompatActivity {
 
 
     private ArrayList<String> arrayList;
+    private ArrayList<Boolean> checkedTextBoxList;
     private ArrayAdapter<String> listAdapter;
 
     public static TextView title;
@@ -91,6 +93,8 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         //Get recyclerView and adapter from other activity instance
         recyclerView = notificationActivity.getRecyclerView();
         arrayList = new ArrayList<String>();
+        checkedTextBoxList = new ArrayList<Boolean>();
+
         listAdapter = new ArrayAdapter<String>(NotificationBuilderActivity.this, R.layout.reminder_list_item,
                 arrayList);
         reminderList.setAdapter(listAdapter);
@@ -104,6 +108,7 @@ public class NotificationBuilderActivity extends AppCompatActivity {
                     String result = String.valueOf(reminder_text_view.getText());
                     reminder_text_view.setText("");
                     arrayList.add(result);
+                    checkedTextBoxList.add(false);
                     listAdapter.notifyDataSetChanged();
                     count++;
                 }
@@ -128,6 +133,7 @@ public class NotificationBuilderActivity extends AppCompatActivity {
                                     count--;
                                     addButton.setEnabled(true);
                                     arrayList.remove(position);
+                                    checkedTextBoxList.remove(position);
                                     listAdapter.notifyDataSetChanged();
                                 }
                             }
@@ -135,13 +141,14 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         reminderList.setOnTouchListener(touchListener);
     }
 
-    private Card createCard(String type, String title, String message, ArrayList<String> reminderArray){
+    private Card createCard(String type, String title, String message, ArrayList<String> reminderArray, ArrayList<Boolean> checkBoxReminderArray){
             Card name = new Card();
             name.setType(type);
             name.setTitle(title);
             name.setDate(String.valueOf(DATE));
             name.setMessage(message);
             name.setReminderArray(reminderArray);
+            name.setCheckBoxReminderArray(checkBoxReminderArray);
             return name;
     }
 
@@ -166,7 +173,8 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         String m_TextTitle = title.getText().toString();
         String m_TextMessage = description.getText().toString();
         ArrayList <String> m_ReminderArray = arrayList;
-        Card a = createCard(m_TextType,m_TextTitle, m_TextMessage, m_ReminderArray);
+        ArrayList <Boolean> m_CheckBoxReminderArray = checkedTextBoxList;
+        Card a = createCard(m_TextType,m_TextTitle, m_TextMessage, m_ReminderArray, m_CheckBoxReminderArray);
         if (!a.getTitle().equals("")) {
             adapter = notificationActivity.getAdapter();
             mRef.child(mAuth.getCurrentUser().getUid()).child(m_TextTitle).setValue(a);

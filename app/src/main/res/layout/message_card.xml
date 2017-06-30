@@ -67,6 +67,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/title"
                     android:isScrollContainer="true"
+                    android:choiceMode="multipleChoice"
+                    android:animateLayoutChanges="true"
                     />
 
 

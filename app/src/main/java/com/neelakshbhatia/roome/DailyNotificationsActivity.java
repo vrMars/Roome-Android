@@ -78,6 +78,7 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
     private List<Card> cardList;
     private ArrayList<String> mKeys = new ArrayList<>();
     private DatabaseReference mRef;
+    private DatabaseReference mRef_reminders;
     private SlideInUpAnimator animator;
 
     private Intent signOut;
@@ -86,8 +87,10 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
 
     private FirebaseAuth mAuth;
     private ArrayList<String> reminder_array;
+    private ArrayList<Boolean> checkBoxReminder_array;
 
-    Card value = new Card("","","","",reminder_array);
+
+    Card value = new Card("","","","",reminder_array, checkBoxReminder_array);
     int rmPosition;
     int indexKey;
     private String m_TextTitle = "";
@@ -183,7 +186,7 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
                 int index = mKeys.indexOf(key);
                 mKeys.remove(key);
                 if (!alreadyRemoved) {
-                    cardList.remove(index);
+                   cardList.remove(index);
                     adapter.notifyItemRemoved(index);
                 }
                 alreadyRemoved = false;

@@ -5,24 +5,40 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.media.Image;
+import android.os.Handler;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.CheckedTextView;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 
 /**
@@ -30,11 +46,11 @@ import java.util.List;
  */
 
 public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHolder> {
-    private List<Card> messageList;
+    public static List<Card> messageList;
     private Context mContext;
     private String cardOption = "";
     private int lastPosition = -1;
-    public CheckedTextView reminderListTextView;
+    boolean checkState[];
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
@@ -53,23 +69,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
             title = (TextView) view.findViewById(R.id.title);
             message = (TextView) view.findViewById(R.id.count);
             reminderArrayListView = (ListView) view.findViewById(R.id.reminder_list_view);
-            reminderListTextView = (CheckedTextView) view.findViewById(R.id.reminder_list_item);
-
-            reminderArrayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        if (reminderArrayListView.isChecked()) {
-                            // set check mark drawable and set checked property to false
-                            reminderListTextView.setCheckMarkDrawable(0);
-                            reminderListTextView.setChecked(false);
-                        } else {
-                            // set check mark drawable and set checked property to true
-                            reminderListTextView.setCheckMarkDrawable(R.mipmap.ic_check_white_24dp);
-                            reminderListTextView.setChecked(true);
-                        }
-                    }
-                });
             }
     }
 
@@ -87,18 +86,26 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     }
 
     @Override
-    public void onBindViewHolder(final MyViewHolder holder, int position) {
-        Card card = messageList.get(position);
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
+        final Card card = messageList.get(position);
         if (!card.getTitle().equals("")) {
             if (card.getType().equals("Reminder")) {
                 holder.parentCard.setCardBackgroundColor(Color.parseColor("#b71c1c"));
                 holder.parentCard.setRadius(70);
                 int height = card.getReminderArray().size();
-                holder.parentCard.getLayoutParams().height = (int)convertDpToPixel(150+(height * 40));
-                ArrayList<String> reminderArray = card.getReminderArray();
-                ArrayAdapter<String> listAdapter = new ArrayAdapter<String>(mContext, R.layout.reminder_list_item,
-                        reminderArray);
+                holder.parentCard.getLayoutParams().height = (int)convertDpToPixel(150+(height * 35));
+                //CUSTOM OBJECT ARRAY, with stirng + bool
+                final ArrayList<String> reminderArray = card.getReminderArray();
+                final ArrayList<Boolean> checkBoxReminderArray = card.getCheckBoxReminderArray();
+                final ArrayAdapter<Boolean> listAdapter = new ArrayAdapter<Boolean>(mContext,
+                       R.layout.mult_choice_checkbox, checkBoxReminderArray);
                 holder.reminderArrayListView.setAdapter(listAdapter);
+                holder.reminderArrayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        checkBoxReminderArray.set(position,true);
+                    }
+                });
             }
             else if (card.getType().equals("Poll")){
                 holder.parentCard.setCardBackgroundColor(Color.parseColor("#546e7a"));

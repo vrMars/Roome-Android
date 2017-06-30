@@ -14,16 +14,18 @@ public class Card {
     private String message;
     private String date;
     private ArrayList<String> reminderArray;
+    private ArrayList<Boolean> checkBoxReminderArray;
 
     public Card() {
     }
 
-    public Card(String type, String title, String message, String date,ArrayList<String> reminderArray) {
+    public Card(String type, String title, String message, String date,ArrayList<String> reminderArray, ArrayList<Boolean> checkBoxReminderArray) {
         this.type = type;
         this.title = title;
         this.message = message;
         this.date = date;
         this.reminderArray = reminderArray;
+        this.checkBoxReminderArray = checkBoxReminderArray;
     }
 
     public String getType() {
@@ -64,5 +66,13 @@ public class Card {
 
     public void setReminderArray(ArrayList<String> reminderArray) {
         this.reminderArray = reminderArray;
+    }
+
+    public ArrayList<Boolean> getCheckBoxReminderArray() {
+        return checkBoxReminderArray;
+    }
+
+    public void setCheckBoxReminderArray(ArrayList<Boolean> checkBoxReminderArray) {
+        this.checkBoxReminderArray = checkBoxReminderArray;
     }
 }
