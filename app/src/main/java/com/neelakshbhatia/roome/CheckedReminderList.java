@@ -25,4 +25,7 @@ public class CheckedReminderList {
     public void setReminderCheck(Boolean check){
         this.check=check;
     }
+    public void setReminderText(String text){
+        this.text=text;
+    }
 }

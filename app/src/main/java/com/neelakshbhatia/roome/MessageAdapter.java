@@ -102,11 +102,31 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                 final CheckedRemindersListAdapter listAdapter = new CheckedRemindersListAdapter(mContext,
                        reminderArray);
                 holder.reminderArrayListView.setAdapter(listAdapter);
+
                 holder.reminderArrayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        Log.d("tag",String.valueOf(holder.reminderArrayListView.isItemChecked(position)));
+
+                        if(holder.reminderArrayListView.isItemChecked(position)){
+                          reminderArray.get(position).setReminderCheck(false);
+                         // listAdapter.notifyDataSetChanged();
+                            holder.reminderArrayListView.deferNotifyDataSetChanged();
+                           Log.d("tag","cuck1");
+                       }
+                       else{
+                           reminderArray.get(position).setReminderCheck(true);
+                       // listAdapter.notifyDataSetChanged();
+                           Log.d("tag","cuck2");
+
+                       }
+                       Log.d("tag",String.valueOf(holder.reminderArrayListView.isItemChecked(position)));
+                        notifyDataSetChanged();
+
                     }
                 });
+
+
             }
             else if (card.getType().equals("Poll")){
                 holder.parentCard.setCardBackgroundColor(Color.parseColor("#546e7a"));

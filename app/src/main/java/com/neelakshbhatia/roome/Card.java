@@ -1,7 +1,5 @@
 package com.neelakshbhatia.roome;
 
-import android.widget.ListView;
-
 import java.util.ArrayList;
 
 /**
