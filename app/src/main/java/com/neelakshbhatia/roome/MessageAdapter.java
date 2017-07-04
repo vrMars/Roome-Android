@@ -125,6 +125,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                         }
                     }
                 });
+                //TODO: FIX IF ARRAY BECOMES EMPTY
                 for (int i = 0;i<reminderArray.size();i++){
                     if (reminderArray.get(i).getReminderCheck()){
                         reminderArray.remove(i);
@@ -134,9 +135,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                     }
                 }
                 listAdapter.notifyDataSetChanged();
-
-
-
             }
             else if (card.getType().equals("Poll")){
                 holder.parentCard.setCardBackgroundColor(Color.parseColor("#546e7a"));
