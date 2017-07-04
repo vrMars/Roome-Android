@@ -104,7 +104,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                 holder.reminderArrayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        reminderArray.get(position).setReminderText("poop");
+                        reminderArray.get(position).setReminderText("pomop");
                     }
                 });
                 final CheckedRemindersListAdapter listAdapter = new CheckedRemindersListAdapter(mContext,reminderArray);
