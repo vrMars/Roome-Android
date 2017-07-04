@@ -104,17 +104,27 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                 //CUSTOM ADAPTER!!!
                 //TODO: CUSTOM ARRAY ADAPTER
                 final ArrayList<CheckedReminderList> reminderArray = card.getReminderArray();
+                Log.d("tag",String.valueOf(reminderArray));
                 final CheckedRemindersListAdapter listAdapter = new CheckedRemindersListAdapter(mContext,reminderArray);
+                holder.reminderArrayListView.setAdapter(listAdapter);
                 holder.reminderArrayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        reminderArray.get(position).setReminderCheck(true);
+                        if (view!=null){
+                            CheckedTextView x = (CheckedTextView) view.findViewById(R.id.reminder_list_item1);
+                            if (reminderArray.get(position).getReminderCheck()) {
+                                x.setChecked(false);
+                            }
+                            else{
+                                x.setChecked(true);
+                            }
+                            reminderArray.get(position).setReminderCheck(!reminderArray.get(position).getReminderCheck());
+                        }
                         card.setReminderArray(reminderArray);
                         mRef.child(mAuth.getCurrentUser().getUid()).child(card.getTitle()).setValue(card);
                     }
                 });
 
-                holder.reminderArrayListView.setAdapter(listAdapter);
 
             }
             else if (card.getType().equals("Poll")){

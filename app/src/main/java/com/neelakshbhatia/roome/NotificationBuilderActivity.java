@@ -106,9 +106,8 @@ public class NotificationBuilderActivity extends AppCompatActivity {
                 if (count<6) {
                     addButton.setEnabled(true);
                     String result = String.valueOf(reminder_text_view.getText());
-                    //TODO: CHECK HERE FOR STATE
                     reminder_text_view.setText("");
-                    arrayList.add(new CheckedReminderList(result,false));
+                    arrayList.add(new CheckedReminderList(result,true));
                     listAdapter.notifyDataSetChanged();
                     count++;
                 }
