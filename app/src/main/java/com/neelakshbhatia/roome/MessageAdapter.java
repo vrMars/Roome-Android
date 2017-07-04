@@ -39,6 +39,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.StringTokenizer;
 
 import static android.content.ContentValues.TAG;
 
@@ -104,7 +105,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                 //CUSTOM ADAPTER!!!
                 //TODO: CUSTOM ARRAY ADAPTER
                 final ArrayList<CheckedReminderList> reminderArray = card.getReminderArray();
-                Log.d("tag",String.valueOf(reminderArray));
                 final CheckedRemindersListAdapter listAdapter = new CheckedRemindersListAdapter(mContext,reminderArray);
                 holder.reminderArrayListView.setAdapter(listAdapter);
 
@@ -120,18 +120,21 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                                 x.setChecked(true);
                             }
                             reminderArray.get(position).setReminderCheck(!reminderArray.get(position).getReminderCheck());
+                            card.setReminderArray(reminderArray);
+                            mRef.child(mAuth.getCurrentUser().getUid()).child(card.getTitle()).setValue(card);
                         }
-                        card.setReminderArray(reminderArray);
-                        mRef.child(mAuth.getCurrentUser().getUid()).child(card.getTitle()).setValue(card);
                     }
                 });
                 for (int i = 0;i<reminderArray.size();i++){
                     if (reminderArray.get(i).getReminderCheck()){
-                            reminderArray.remove(position);
+                        reminderArray.remove(i);
+                        card.setReminderArray(reminderArray);
+                        mRef.child(mAuth.getCurrentUser().getUid()).child(card.getTitle()).setValue(card);
+                        Log.d("pop",String.valueOf(i) +" is removed out of "+String.valueOf(reminderArray.size()));
                     }
-                    listAdapter.notifyDataSetChanged();
-
                 }
+                listAdapter.notifyDataSetChanged();
+
 
 
             }
