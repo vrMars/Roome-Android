@@ -92,6 +92,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final Card card = messageList.get(position);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference mRef = database.getReference("users");
+        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
         if (!card.getTitle().equals("")) {
             if (card.getType().equals("Reminder")) {
                 holder.parentCard.setCardBackgroundColor(Color.parseColor("#b71c1c"));
@@ -104,16 +107,20 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                 holder.reminderArrayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        reminderArray.get(position).setReminderText("pomop");
+                        if (reminderArray.get(position).getReminderCheck()) {
+                            reminderArray.get(position).setReminderCheck(false);
+                        }
+                        else{
+                            reminderArray.get(position).setReminderCheck(true);
+                        }
+                        card.setReminderArray(reminderArray);
+                        mRef.child(mAuth.getCurrentUser().getUid()).child(card.getTitle()).setValue(card);
+                        //notificationActivity.getAdapter().notifyDataSetChanged();
                     }
                 });
                 final CheckedRemindersListAdapter listAdapter = new CheckedRemindersListAdapter(mContext,reminderArray);
 
                 holder.reminderArrayListView.setAdapter(listAdapter);
-                FirebaseAuth mAuth = FirebaseAuth.getInstance();
-                DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("users/"+mAuth.getCurrentUser().getUid()+"/"+card.getTitle()+"/reminderArray");
-                mRef.setValue(new CheckedReminderList("cool",true));
-                notificationActivity.getAdapter().notifyDataSetChanged();
 
             }
             else if (card.getType().equals("Poll")){
