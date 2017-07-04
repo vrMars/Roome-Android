@@ -176,7 +176,6 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
                     String key = dataSnapshot.getKey();
                     int index = mKeys.indexOf(key);
                     cardList.set(index, newVal);
-                    adapter.notifyItemChanged(index);
             }
 
             @Override

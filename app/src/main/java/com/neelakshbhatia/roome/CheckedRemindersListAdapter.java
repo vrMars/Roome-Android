@@ -1,6 +1,7 @@
 package com.neelakshbhatia.roome;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +33,7 @@ public class CheckedRemindersListAdapter extends ArrayAdapter<CheckedReminderLis
             // Populate the data into the template view using the data object
             reminderListItem.setText(remindersList.getReminderText());
             reminderListItem.setChecked(remindersList.getReminderCheck());
-            // Return the completed view to render on screen
+            Log.d("Tag",String.valueOf(remindersList.getReminderCheck()));
             return convertView;
         }
     private Boolean isChecked = false;

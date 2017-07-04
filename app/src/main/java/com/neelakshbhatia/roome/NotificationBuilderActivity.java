@@ -52,6 +52,7 @@ public class NotificationBuilderActivity extends AppCompatActivity {
     private DatabaseReference mRef;
     public static Button addButton;
     public static ListView reminderList;
+    public static Card x;
 
     private RecyclerView recyclerView;
     public static int count;
@@ -169,10 +170,10 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         String m_TextTitle = title.getText().toString();
         String m_TextMessage = description.getText().toString();
         ArrayList <CheckedReminderList> m_ReminderArray = arrayList;
-        Card a = createCard(m_TextType,m_TextTitle, m_TextMessage, m_ReminderArray);
-        if (!a.getTitle().equals("")) {
+        x= createCard(m_TextType,m_TextTitle, m_TextMessage, m_ReminderArray);
+        if (!x.getTitle().equals("")) {
             adapter = notificationActivity.getAdapter();
-            mRef.child(mAuth.getCurrentUser().getUid()).child(m_TextTitle).setValue(a);
+            mRef.child(mAuth.getCurrentUser().getUid()).child(m_TextTitle).setValue(x);
             adapter.notifyDataSetChanged();
         }
         onLeaveThisActivity();

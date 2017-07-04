@@ -5,19 +5,19 @@ package com.neelakshbhatia.roome;
  */
 
 public class CheckedReminderList {
-    public String text="";
+    public String xtext="pop";
     public Boolean check=false;
 
     public CheckedReminderList(){
     }
 
     public CheckedReminderList(String text, Boolean check){
-        this.text=text;
+        this.xtext=text;
         this.check=check;
     }
 
     public String getReminderText(){
-        return text;
+        return xtext;
     }
     public Boolean getReminderCheck(){
         return check;
@@ -26,6 +26,6 @@ public class CheckedReminderList {
         this.check=check;
     }
     public void setReminderText(String text){
-        this.text=text;
+        this.xtext = text;
     }
 }

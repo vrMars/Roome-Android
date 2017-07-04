@@ -54,6 +54,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     private int lastPosition = -1;
     boolean checkState[];
 
+    private DailyNotificationsActivity notificationActivity;
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         //Textviews from Card
@@ -90,6 +92,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final Card card = messageList.get(position);
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference mRef = database.getReference("users");
+        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
         if (!card.getTitle().equals("")) {
             if (card.getType().equals("Reminder")) {
                 holder.parentCard.setCardBackgroundColor(Color.parseColor("#b71c1c"));
@@ -99,30 +104,25 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                 //CUSTOM ADAPTER!!!
                 //TODO: CUSTOM ARRAY ADAPTER
                 final ArrayList<CheckedReminderList> reminderArray = card.getReminderArray();
-                final CheckedRemindersListAdapter listAdapter = new CheckedRemindersListAdapter(mContext,
-                       reminderArray);
+                Log.d("tag",String.valueOf(reminderArray));
+                final CheckedRemindersListAdapter listAdapter = new CheckedRemindersListAdapter(mContext,reminderArray);
                 holder.reminderArrayListView.setAdapter(listAdapter);
 
                 holder.reminderArrayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        Log.d("tag",String.valueOf(holder.reminderArrayListView.isItemChecked(position)));
-
-                        if(holder.reminderArrayListView.isItemChecked(position)){
-                          reminderArray.get(position).setReminderCheck(false);
-                         // listAdapter.notifyDataSetChanged();
-                            holder.reminderArrayListView.deferNotifyDataSetChanged();
-                           Log.d("tag","cuck1");
-                       }
-                       else{
-                           reminderArray.get(position).setReminderCheck(true);
-                       // listAdapter.notifyDataSetChanged();
-                           Log.d("tag","cuck2");
-
-                       }
-                       Log.d("tag",String.valueOf(holder.reminderArrayListView.isItemChecked(position)));
-                        notifyDataSetChanged();
-
+                        if (view!=null){
+                            CheckedTextView x = (CheckedTextView) view.findViewById(R.id.reminder_list_item1);
+                            if (reminderArray.get(position).getReminderCheck()) {
+                                x.setChecked(false);
+                            }
+                            else{
+                                x.setChecked(true);
+                            }
+                            reminderArray.get(position).setReminderCheck(!reminderArray.get(position).getReminderCheck());
+                        }
+                        card.setReminderArray(reminderArray);
+                        mRef.child(mAuth.getCurrentUser().getUid()).child(card.getTitle()).setValue(card);
                     }
                 });
 
