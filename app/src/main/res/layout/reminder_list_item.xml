@@ -11,6 +11,6 @@
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:windowSoftInputMode="adjustPan"
     android:isScrollContainer="true"
-    android:checkMark="@mipmap/ic_check_white_24dp"
-    android:checked="true"
+    android:checkMark="@drawable/checkbox_selector"
+    android:checked="false"
     xmlns:android="http://schemas.android.com/apk/res/android" />

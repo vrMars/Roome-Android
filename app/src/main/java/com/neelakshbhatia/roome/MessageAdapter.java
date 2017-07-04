@@ -54,6 +54,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     private int lastPosition = -1;
     boolean checkState[];
 
+    private DailyNotificationsActivity notificationActivity;
+
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
         //Textviews from Card
@@ -99,14 +101,20 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                 //CUSTOM ADAPTER!!!
                 //TODO: CUSTOM ARRAY ADAPTER
                 final ArrayList<CheckedReminderList> reminderArray = card.getReminderArray();
-                final CheckedRemindersListAdapter listAdapter = new CheckedRemindersListAdapter(mContext,
-                       reminderArray);
-                holder.reminderArrayListView.setAdapter(listAdapter);
                 holder.reminderArrayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        reminderArray.get(position).setReminderText("poop");
                     }
                 });
+                final CheckedRemindersListAdapter listAdapter = new CheckedRemindersListAdapter(mContext,reminderArray);
+
+                holder.reminderArrayListView.setAdapter(listAdapter);
+                FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                DatabaseReference mRef = FirebaseDatabase.getInstance().getReference("users/"+mAuth.getCurrentUser().getUid()+"/"+card.getTitle()+"/reminderArray");
+                mRef.setValue(new CheckedReminderList("cool",true));
+                notificationActivity.getAdapter().notifyDataSetChanged();
+
             }
             else if (card.getType().equals("Poll")){
                 holder.parentCard.setCardBackgroundColor(Color.parseColor("#546e7a"));
