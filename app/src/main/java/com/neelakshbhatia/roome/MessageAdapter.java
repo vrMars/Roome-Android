@@ -125,6 +125,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                         mRef.child(mAuth.getCurrentUser().getUid()).child(card.getTitle()).setValue(card);
                     }
                 });
+                for (int i = 0;i<reminderArray.size();i++){
+                    if (reminderArray.get(i).getReminderCheck()){
+                            reminderArray.remove(position);
+                    }
+                    listAdapter.notifyDataSetChanged();
+
+                }
 
 
             }
