@@ -30,7 +30,7 @@ public class CheckedRemindersListAdapter extends ArrayAdapter<CheckedReminderLis
             // Populate the data into the template view using the data object
             reminderListItem.setText(remindersList.getReminderText());
             reminderListItem.setChecked(remindersList.getReminderCheck());
-            // Return the completed view to render on screen
+
             return convertView;
         }
     }

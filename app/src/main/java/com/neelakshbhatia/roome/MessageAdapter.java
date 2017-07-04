@@ -104,21 +104,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                 //CUSTOM ADAPTER!!!
                 //TODO: CUSTOM ARRAY ADAPTER
                 final ArrayList<CheckedReminderList> reminderArray = card.getReminderArray();
+                final CheckedRemindersListAdapter listAdapter = new CheckedRemindersListAdapter(mContext,reminderArray);
                 holder.reminderArrayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if (reminderArray.get(position).getReminderCheck()) {
-                            reminderArray.get(position).setReminderCheck(false);
-                        }
-                        else{
-                            reminderArray.get(position).setReminderCheck(true);
-                        }
+                        reminderArray.get(position).setReminderCheck(true);
                         card.setReminderArray(reminderArray);
                         mRef.child(mAuth.getCurrentUser().getUid()).child(card.getTitle()).setValue(card);
-                        //notificationActivity.getAdapter().notifyDataSetChanged();
                     }
                 });
-                final CheckedRemindersListAdapter listAdapter = new CheckedRemindersListAdapter(mContext,reminderArray);
 
                 holder.reminderArrayListView.setAdapter(listAdapter);
 
