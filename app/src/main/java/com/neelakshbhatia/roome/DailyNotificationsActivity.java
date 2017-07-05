@@ -370,24 +370,6 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
-        switch (item.getItemId()) {
-            case R.id.action_settings:
-                signOut();
-                signOut = new Intent(getApplicationContext(),LoginActivity.class);
-                startActivity(signOut);
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

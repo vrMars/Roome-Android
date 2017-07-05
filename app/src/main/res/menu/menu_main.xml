@@ -1,10 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.neelakshbhatia.roome.DailyNotificationsActivity" >
+    tools:context="com.neelakshbhatia.roome.NotificationBuilderActivity" >
 
     <item android:id="@+id/action_settings"
-        android:title="@string/sign_out"
         android:orderInCategory="100"
-        android:showAsAction="ifRoom" />
+        android:title="Done"
+        android:icon="@drawable/ic_check_white_24dp"
+        app:showAsAction="ifRoom" />
 </menu>

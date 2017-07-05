@@ -13,6 +13,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -163,6 +165,37 @@ public class NotificationBuilderActivity extends AppCompatActivity {
             return name;
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                count = 0;
+                String m_TextType = myType;
+                String m_TextTitle = title.getText().toString();
+                String m_TextMessage = description.getText().toString();
+                ArrayList <CheckedReminderList> m_ReminderArray = arrayList;
+                x= createCard(m_TextType,m_TextTitle, m_TextMessage, m_ReminderArray);
+                if (!x.getTitle().equals("")) {
+                    adapter = notificationActivity.getAdapter();
+                    mRef.child(mAuth.getCurrentUser().getUid()).child(m_TextTitle).setValue(x);
+                    adapter.notifyDataSetChanged();
+                }
+                Intent startMain = new Intent (this, DailyNotificationsActivity.class);
+                startActivity(startMain);
+                onLeaveThisActivity();
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
     public String convertTypeToEmoji (String x){
         if (x.equals("Reminder")){
             return new String(Character.toChars(0x2705));
@@ -178,17 +211,6 @@ public class NotificationBuilderActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
-        count = 0;
-        String m_TextType = myType;
-        String m_TextTitle = title.getText().toString();
-        String m_TextMessage = description.getText().toString();
-        ArrayList <CheckedReminderList> m_ReminderArray = arrayList;
-        x= createCard(m_TextType,m_TextTitle, m_TextMessage, m_ReminderArray);
-        if (!x.getTitle().equals("")) {
-            adapter = notificationActivity.getAdapter();
-            mRef.child(mAuth.getCurrentUser().getUid()).child(m_TextTitle).setValue(x);
-            adapter.notifyDataSetChanged();
-        }
         onLeaveThisActivity();
     }
 
