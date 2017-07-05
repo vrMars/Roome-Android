@@ -59,6 +59,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     private DailyNotificationsActivity notificationActivity;
 
 
+
     public class MyViewHolder extends RecyclerView.ViewHolder {
         //Textviews from Card
         public CardView parentCard;
@@ -101,46 +102,51 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
             if (card.getType().equals("Reminder")) {
                 holder.parentCard.setCardBackgroundColor(Color.parseColor("#b71c1c"));
                 holder.parentCard.setRadius(70);
-                int height = card.getReminderArray().size();
-                holder.parentCard.getLayoutParams().height = (int)convertDpToPixel(150+(height * 40));
-                //CUSTOM ADAPTER!!!
-                //TODO: CUSTOM ARRAY ADAPTER
-                final ArrayList<CheckedReminderList> reminderArray = card.getReminderArray();
-                final CheckedRemindersListAdapter listAdapter = new CheckedRemindersListAdapter(mContext,reminderArray);
-                holder.reminderArrayListView.setAdapter(listAdapter);
+                int height = 0;
+                if (card.getReminderArray()!=null) {
+                    height = card.getReminderArray().size();
+                    holder.parentCard.getLayoutParams().height = (int) convertDpToPixel(150 + (height * 40));
 
-                holder.reminderArrayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        if (view!=null){
-                            CheckedTextView x = (CheckedTextView) view.findViewById(R.id.reminder_list_item1);
-                            if (reminderArray.get(position).getReminderCheck()) {
-                                x.setChecked(false);
+                    final ArrayList<CheckedReminderList> reminderArray = card.getReminderArray();
+                    final CheckedRemindersListAdapter listAdapter = new CheckedRemindersListAdapter(mContext, reminderArray);
+                    holder.reminderArrayListView.setAdapter(listAdapter);
+
+                    holder.reminderArrayListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            if (view != null) {
+                                CheckedTextView x = (CheckedTextView) view.findViewById(R.id.reminder_list_item1);
+                                if (reminderArray.get(position).getReminderCheck()) {
+                                    x.setChecked(false);
+                                } else {
+                                    x.setChecked(true);
+                                }
+                                reminderArray.get(position).setReminderCheck(!reminderArray.get(position).getReminderCheck());
+                                card.setReminderArray(reminderArray);
+                                mRef.child(mAuth.getCurrentUser().getUid()).child(card.getTitle()).setValue(card);
+                                lastPosition++;
                             }
-                            else{
-                                x.setChecked(true);
-                            }
-                            reminderArray.get(position).setReminderCheck(!reminderArray.get(position).getReminderCheck());
+                        }
+                    });
+                    //TODO: FIX IF ARRAY BECOMES EMPTY
+
+                    for (int i = reminderArray.size() - 1; i >= 0; i--) {
+                        if (reminderArray.get(i).getReminderCheck()) {
+                            reminderArray.remove(i);
                             card.setReminderArray(reminderArray);
                             mRef.child(mAuth.getCurrentUser().getUid()).child(card.getTitle()).setValue(card);
-                            lastPosition++;
                         }
+                        listAdapter.notifyDataSetChanged();
                     }
-                });
-                //TODO: FIX IF ARRAY BECOMES EMPTY
-
-                for (int i = reminderArray.size()-1;i>=0;i--){
-                    Log.d("pop","POOP:"+String.valueOf(i)+"."+String.valueOf(reminderArray.get(i).getReminderCheck()));
-                    if (reminderArray.get(i).getReminderCheck()){
-                        reminderArray.remove(i);
-                        card.setReminderArray(reminderArray);
-                        mRef.child(mAuth.getCurrentUser().getUid()).child(card.getTitle()).setValue(card);
-                        Log.d("pop",String.valueOf(i) +" is removed out of "+String.valueOf(reminderArray.size()));
-                    }
-                    listAdapter.notifyDataSetChanged();
+                    height = card.getReminderArray().size();
+                    holder.parentCard.getLayoutParams().height = (int) convertDpToPixel(150 + (height * 35));
                 }
-                height = card.getReminderArray().size();
-                holder.parentCard.getLayoutParams().height = (int)convertDpToPixel(150+(height * 35));
+                else{
+                    holder.parentCard.setCardBackgroundColor(Color.parseColor("#559e83"));
+                    holder.message.setText("All done!");
+                    holder.message.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    holder.message.setTextSize(25);
+                }
             }
             else if (card.getType().equals("Poll")){
                 holder.parentCard.setCardBackgroundColor(Color.parseColor("#546e7a"));
@@ -150,7 +156,9 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
             }
             holder.type.setText(card.getType());
             holder.title.setText(card.getTitle());
-            holder.message.setText(card.getMessage());
+            if (!card.getType().equals("Reminder")) {
+                holder.message.setText(card.getMessage());
+            }
         }
     }
 

@@ -39,7 +39,7 @@
             android:scaleType="fitXY"
             android:src="@mipmap/logo"
             android:padding="10px"
-            android:tint="#b6b6b6"
+            android:tint="#e2e2e2"
             android:tintMode="multiply"
             />
 

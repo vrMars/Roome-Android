@@ -49,6 +49,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -131,6 +132,13 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        View header = navigationView.getHeaderView(0);
+        TextView account = (TextView) header.findViewById(R.id.account_text_view);
+        account.setTextSize(18);
+
         fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,6 +165,8 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
 
         //Firebase shit
         mAuth = FirebaseAuth.getInstance();
+        account.setText(String.valueOf(mAuth.getCurrentUser().getEmail()));
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mRef = database.getReference("users/"+mAuth.getCurrentUser().getUid());
 
@@ -338,6 +348,14 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+
+        if (id == R.id.nav_sign_out) {
+            signOut();
+            signOut = new Intent(getApplicationContext(),LoginActivity.class);
+            startActivity(signOut);
+        } else if (id == R.id.nav_home) {
+            // Do nothing (already on it)
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
