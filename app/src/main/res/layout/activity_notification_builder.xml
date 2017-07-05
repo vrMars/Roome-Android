@@ -46,25 +46,13 @@
         android:visibility="gone"
         android:layout_margin="30dp" />
 
-    <Spinner
-        android:id="@+id/card_options_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="false"
-        android:entries="@array/card_options"
-        android:prompt="@string/card_option_prompt"
-        android:layout_centerHorizontal="true"
-        android:layout_weight="1"
-        android:layout_alignTop="@+id/title_editText"
-        android:layout_marginTop="50dp" />
-
     <AutoCompleteTextView
         android:id="@+id/reminder_text_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Enter reminders..."
-        android:paddingTop="30dp"
-        android:layout_alignTop="@+id/card_options_spinner"
+        android:paddingTop="60dp"
+        android:layout_alignTop="@+id/title_editText"
         android:layout_centerHorizontal="true"
         android:visibility="gone"
          />

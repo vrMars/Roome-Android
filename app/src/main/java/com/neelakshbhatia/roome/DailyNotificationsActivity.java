@@ -52,6 +52,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -84,7 +85,7 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
 
     private Intent signOut;
     private Boolean alreadyRemoved = false;
-    private FloatingActionButton fab;
+    private FloatingActionMenu fab;
 
     private FirebaseAuth mAuth;
     private ArrayList<CheckedReminderList> reminder_array;
@@ -139,11 +140,32 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         TextView account = (TextView) header.findViewById(R.id.account_text_view);
         account.setTextSize(18);
 
-        fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        fab = (FloatingActionMenu) findViewById(R.id.fab);
+        fab.setClosedOnTouchOutside(true);
+        com.github.clans.fab.FloatingActionButton reminder = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item1);
+                reminder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent createNotification = new Intent(getApplicationContext(),NotificationBuilderActivity.class);
+                createNotification.putExtra("type","Reminder");
+                startActivity(createNotification);
+            }
+        });
+        com.github.clans.fab.FloatingActionButton poll = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item2);
+        poll.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent createNotification = new Intent(getApplicationContext(),NotificationBuilderActivity.class);
+                createNotification.putExtra("type","Poll");
+                startActivity(createNotification);
+            }
+        });
+        com.github.clans.fab.FloatingActionButton message = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item3);
+        message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent createNotification = new Intent(getApplicationContext(),NotificationBuilderActivity.class);
+                createNotification.putExtra("type","Message");
                 startActivity(createNotification);
             }
         });
@@ -162,6 +184,29 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         //Swipe to delete functionality exp
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
+        {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
+            {
+                if (dy > 0 ||dy<0 && fab.isShown())
+                {
+                    fab.hideMenuButton(true);
+                }
+            }
+
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState)
+            {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE)
+                {
+                    fab.showMenuButton(true);
+                }
+
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+        });
 
         //Firebase shit
         mAuth = FirebaseAuth.getInstance();

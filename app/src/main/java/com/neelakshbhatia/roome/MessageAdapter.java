@@ -71,7 +71,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
             super(view);
             //text from card
             parentCard = (CardView) view.findViewById(R.id.card_view);
-            cardType = (Spinner) view.findViewById(R.id.card_options_spinner);
             type = (TextView) view.findViewById(R.id.type);
             title = (TextView) view.findViewById(R.id.title);
             message = (TextView) view.findViewById(R.id.count);

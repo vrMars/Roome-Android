@@ -53,6 +53,9 @@ public class NotificationBuilderActivity extends AppCompatActivity {
     public static Button addButton;
     public static ListView reminderList;
     public static Card x;
+    private Intent activityIntent;
+    private String myType;
+
 
     private RecyclerView recyclerView;
     public static int count;
@@ -76,9 +79,8 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        card_options_spinner = (Spinner) findViewById(R.id.card_options_spinner);
-        card_options_spinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
+        activityIntent = getIntent();
+        myType = activityIntent.getStringExtra("type");
 
         addButton = (Button) findViewById(R.id.addButton);
         reminderList = (ListView) findViewById(R.id.reminder_listView);
@@ -86,6 +88,19 @@ public class NotificationBuilderActivity extends AppCompatActivity {
 
         title = (EditText) findViewById(R.id.title_editText);
         description = (EditText) findViewById(R.id.description_editText);
+
+        if (myType.equals("Reminder")){
+            reminderList.setVisibility(View.VISIBLE);
+            addButton.setVisibility(View.VISIBLE);
+            reminder_text_view.setVisibility(View.VISIBLE);
+            description.setVisibility(View.GONE);
+        }
+        else{
+            reminderList.setVisibility(View.GONE);
+            addButton.setVisibility(View.GONE);
+            reminder_text_view.setVisibility(View.GONE);
+            description.setVisibility(View.VISIBLE);
+        }
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mRef = database.getReference("users");
@@ -95,8 +110,7 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         recyclerView = notificationActivity.getRecyclerView();
         arrayList = new ArrayList<CheckedReminderList>();
 
-        listAdapter = new ArrayAdapter<CheckedReminderList>(NotificationBuilderActivity.this, R.layout.reminder_list_item,
-                arrayList);
+        final CheckedReminderListAdapaterDark listAdapter = new CheckedReminderListAdapaterDark(this, arrayList);
         reminderList.setAdapter(listAdapter);
 
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -161,12 +175,11 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         }
     }
 
-    //CANT STORE LIST_VIEW iN FIREBASE REFACTOR TO STORE ARRAY!
     @Override
     public void onPause() {
         super.onPause();
         count = 0;
-        String m_TextType = String.valueOf(card_options_spinner.getSelectedItem());
+        String m_TextType = myType;
         String m_TextTitle = title.getText().toString();
         String m_TextMessage = description.getText().toString();
         ArrayList <CheckedReminderList> m_ReminderArray = arrayList;
