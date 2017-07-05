@@ -19,6 +19,7 @@ package com.neelakshbhatia.roome;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -27,6 +28,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +40,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
+
+import static com.neelakshbhatia.roome.R.id.scrollView;
 
 public class LoginActivity extends BaseActivity implements
         View.OnClickListener, View.OnTouchListener{
@@ -76,7 +80,39 @@ public class LoginActivity extends BaseActivity implements
         mStatusTextView = (TextView) findViewById(R.id.status);
         mDetailTextView = (TextView) findViewById(R.id.detail);
         mEmailField = (EditText) findViewById(R.id.field_email);
+        mEmailField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                final Handler handler;
+                handler = new Handler();
+
+                final Runnable r = new Runnable() {
+                    public void run() {
+                        ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView);
+                        scrollView.smoothScrollTo(0, 500);
+                        handler.postDelayed(this, 200);
+                    }
+                };
+                handler.postDelayed(r, 200);
+            }
+        });
         mPasswordField = (EditText) findViewById(R.id.field_password);
+        mPasswordField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                final Handler handler;
+                handler = new Handler();
+
+                final Runnable r = new Runnable() {
+                    public void run() {
+                        ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView);
+                        scrollView.smoothScrollTo(0, 500);
+                        handler.postDelayed(this, 200);
+                    }
+                };
+                handler.postDelayed(r, 200);
+            }
+        });
 
         // Buttons
         findViewById(R.id.email_sign_in_button).setOnClickListener(this);
