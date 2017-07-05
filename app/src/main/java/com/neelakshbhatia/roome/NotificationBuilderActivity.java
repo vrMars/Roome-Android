@@ -3,6 +3,7 @@ package com.neelakshbhatia.roome;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.design.widget.CheckableImageButton;
@@ -10,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -55,6 +57,7 @@ public class NotificationBuilderActivity extends AppCompatActivity {
     public static Button addButton;
     public static ListView reminderList;
     public static Card x;
+    private CardView cardWidget;
     private Intent activityIntent;
     private String myType;
 
@@ -91,6 +94,7 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         title = (EditText) findViewById(R.id.title_editText);
         description = (EditText) findViewById(R.id.description_editText);
 
+
         if (myType.equals("Reminder")){
             reminderList.setVisibility(View.VISIBLE);
             addButton.setVisibility(View.VISIBLE);
@@ -104,6 +108,17 @@ public class NotificationBuilderActivity extends AppCompatActivity {
             description.setVisibility(View.VISIBLE);
         }
 
+        cardWidget = (CardView) findViewById(R.id.card_view_notif);
+        if (myType.equals("Reminder")){
+            cardWidget.setCardBackgroundColor(Color.parseColor("#b71c1c"));
+        }
+        else if (myType.equals("Poll")){
+            cardWidget.setCardBackgroundColor(Color.parseColor("#546e7a"));
+        }
+        else{
+            cardWidget.setCardBackgroundColor(Color.parseColor("#1565c0"));
+        }
+
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mRef = database.getReference("users");
         mAuth = FirebaseAuth.getInstance();
@@ -112,7 +127,7 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         recyclerView = notificationActivity.getRecyclerView();
         arrayList = new ArrayList<CheckedReminderList>();
 
-        final CheckedReminderListAdapaterDark listAdapter = new CheckedReminderListAdapaterDark(this, arrayList);
+        final CheckedRemindersListAdapter listAdapter = new CheckedRemindersListAdapter(this, arrayList);
         reminderList.setAdapter(listAdapter);
 
         addButton.setOnClickListener(new View.OnClickListener() {
@@ -211,6 +226,7 @@ public class NotificationBuilderActivity extends AppCompatActivity {
     @Override
     public void onPause() {
         super.onPause();
+        count = 0;
         onLeaveThisActivity();
     }
 
