@@ -37,6 +37,7 @@ dependencies {
     compile 'uk.co.chrisjenx:calligraphy:2.3.0'
     compile 'jp.wasabeef:recyclerview-animators:2.2.6'
     testCompile 'junit:junit:4.12'
+    compile 'com.github.clans:fab:1.6.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0-RC1'
 }
 

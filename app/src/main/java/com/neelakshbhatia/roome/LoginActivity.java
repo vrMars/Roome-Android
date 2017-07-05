@@ -170,6 +170,7 @@ public class LoginActivity extends BaseActivity implements
                                 // Hide the status bar.
                                 int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
                                 decorView.setSystemUiVisibility(uiOptions);
+                                startMain = new Intent (LoginActivity.this, DailyNotificationsActivity.class);
                                 startActivity(startMain);
                             }
                         } else {
@@ -294,8 +295,16 @@ public class LoginActivity extends BaseActivity implements
             sendEmailVerification();
         }
         else if (i == R.id.proceed_to_list_button){
+            startMain = new Intent (this, DailyNotificationsActivity.class);
             startActivity(startMain);
         }
+    }
+    @Override
+    public void startActivityForResult(Intent intent, int requestCode) {
+        if (intent == null) {
+            intent = new Intent();
+        }
+        super.startActivityForResult(intent, requestCode);
     }
 
     @Override
