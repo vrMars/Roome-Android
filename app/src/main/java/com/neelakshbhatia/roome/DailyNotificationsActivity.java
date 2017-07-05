@@ -82,6 +82,7 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
     private DatabaseReference mRef;
     private DatabaseReference mRef_reminders;
     private SlideInUpAnimator animator;
+    private TextView emptyCardList;
 
     private Intent signOut;
     private Boolean alreadyRemoved = false;
@@ -174,6 +175,13 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         cardList = new ArrayList<>();
         adapter = new MessageAdapter(this, cardList);
+        emptyCardList = (TextView) findViewById(R.id.emptyCardView);
+
+        if (cardList.size()==0){
+            emptyCardList.setVisibility(View.VISIBLE);
+        }
+
+
 
         //RecyclerView for Cards setup
         RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
@@ -181,7 +189,7 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
 
         recyclerView.setAdapter(adapter);
 
-        //Swipe to delete functionality exp
+        //Swipe to delete functionality exp!
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
@@ -222,6 +230,7 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
                     mKeys.add(dataSnapshot.getKey());
                     int index = mKeys.indexOf(dataSnapshot.getKey());
                     prepareMessages(value);
+                    emptyCardList.setVisibility(View.GONE);
                     adapter.notifyItemInserted(index);
             }
 
@@ -231,6 +240,9 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
                     String key = dataSnapshot.getKey();
                     int index = mKeys.indexOf(key);
                     cardList.set(index, newVal);
+                if (cardList.size()==0){
+                    emptyCardList.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -241,6 +253,9 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
                 if (!alreadyRemoved) {
                    cardList.remove(index);
                     adapter.notifyItemRemoved(index);
+                }
+                if (cardList.size()==0){
+                    emptyCardList.setVisibility(View.VISIBLE);
                 }
                 alreadyRemoved = false;
             }
