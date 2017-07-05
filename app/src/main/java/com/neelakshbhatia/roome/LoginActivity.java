@@ -91,7 +91,6 @@ public class LoginActivity extends BaseActivity implements
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
 
-        startMain = new Intent (this, DailyNotificationsActivity.class);
     }
 
     // [START on_start_check_user]
@@ -101,6 +100,7 @@ public class LoginActivity extends BaseActivity implements
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
+        startMain = new Intent (this, DailyNotificationsActivity.class);
     }
     // [END on_start_check_user]
 
