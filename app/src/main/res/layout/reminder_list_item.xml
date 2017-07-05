@@ -11,5 +11,5 @@
     android:minHeight="?android:attr/listPreferredItemHeightSmall"
     android:windowSoftInputMode="adjustPan"
     android:isScrollContainer="true"
-    android:checkMark="?android:attr/listChoiceIndicatorMultiple"
+    android:checkMark="@drawable/checkbox_selector"
     xmlns:android="http://schemas.android.com/apk/res/android" />

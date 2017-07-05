@@ -53,6 +53,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     private Context mContext;
     private String cardOption = "";
     private int lastPosition = -1;
+    private int size = 0;
     boolean checkState[];
 
     private DailyNotificationsActivity notificationActivity;
@@ -101,7 +102,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                 holder.parentCard.setCardBackgroundColor(Color.parseColor("#b71c1c"));
                 holder.parentCard.setRadius(70);
                 int height = card.getReminderArray().size();
-                holder.parentCard.getLayoutParams().height = (int)convertDpToPixel(150+(height * 35));
+                holder.parentCard.getLayoutParams().height = (int)convertDpToPixel(150+(height * 40));
                 //CUSTOM ADAPTER!!!
                 //TODO: CUSTOM ARRAY ADAPTER
                 final ArrayList<CheckedReminderList> reminderArray = card.getReminderArray();
@@ -122,19 +123,24 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                             reminderArray.get(position).setReminderCheck(!reminderArray.get(position).getReminderCheck());
                             card.setReminderArray(reminderArray);
                             mRef.child(mAuth.getCurrentUser().getUid()).child(card.getTitle()).setValue(card);
+                            lastPosition++;
                         }
                     }
                 });
                 //TODO: FIX IF ARRAY BECOMES EMPTY
-                for (int i = 0;i<reminderArray.size();i++){
+
+                for (int i = reminderArray.size()-1;i>=0;i--){
+                    Log.d("pop","POOP:"+String.valueOf(i)+"."+String.valueOf(reminderArray.get(i).getReminderCheck()));
                     if (reminderArray.get(i).getReminderCheck()){
                         reminderArray.remove(i);
                         card.setReminderArray(reminderArray);
                         mRef.child(mAuth.getCurrentUser().getUid()).child(card.getTitle()).setValue(card);
                         Log.d("pop",String.valueOf(i) +" is removed out of "+String.valueOf(reminderArray.size()));
                     }
+                    listAdapter.notifyDataSetChanged();
                 }
-                listAdapter.notifyDataSetChanged();
+                height = card.getReminderArray().size();
+                holder.parentCard.getLayoutParams().height = (int)convertDpToPixel(150+(height * 35));
             }
             else if (card.getType().equals("Poll")){
                 holder.parentCard.setCardBackgroundColor(Color.parseColor("#546e7a"));
