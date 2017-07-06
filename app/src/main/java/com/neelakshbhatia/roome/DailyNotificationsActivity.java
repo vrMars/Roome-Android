@@ -15,6 +15,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -52,7 +53,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.login.LoginManager;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -74,6 +81,7 @@ import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
+import static com.neelakshbhatia.roome.LoginActivity.account_email;
 
 public class DailyNotificationsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "LOG";
@@ -83,6 +91,8 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
     private DatabaseReference mRef_reminders;
     private SlideInUpAnimator animator;
     private TextView emptyCardList;
+
+    private GoogleApiClient mGoogleApiClient;
 
     private Intent signOut;
     private Boolean alreadyRemoved = false;
@@ -218,7 +228,7 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
 
         //Firebase shit
         mAuth = FirebaseAuth.getInstance();
-        account.setText(String.valueOf(mAuth.getCurrentUser().getEmail()));
+        account.setText(account_email);
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         mRef = database.getReference("users/"+mAuth.getCurrentUser().getUid());
@@ -271,6 +281,19 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
             }
         });
     }
+
+    @Override
+    protected void onStart() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
     //LOSE FOCUS ON EDITEXT when clicked outside :o
     @Override
     public boolean dispatchTouchEvent(MotionEvent event) {
@@ -383,6 +406,19 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         if (mAuth != null) {
             mAuth.signOut();
         }
+
+        LoginManager.getInstance().logOut();
+
+
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
+                new ResultCallback<Status>() {
+                    @Override
+                    public void onResult(Status status) {
+                        // ...
+                        Intent i=new Intent(getApplicationContext(),LoginActivity.class);
+                        startActivity(i);
+                    }
+                });
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -393,8 +429,6 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
 
         if (id == R.id.nav_sign_out) {
             signOut();
-            signOut = new Intent(getApplicationContext(),LoginActivity.class);
-            startActivity(signOut);
         } else if (id == R.id.nav_home) {
             // Do nothing (already on it)
         }

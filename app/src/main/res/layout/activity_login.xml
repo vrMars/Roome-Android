@@ -31,19 +31,17 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
 
-        android:paddingTop="50dp">
+        android:paddingTop="0dp">
 
         <ImageView
             android:id="@+id/icon"
             style="@style/Widget.AppCompat.Button.Borderless.Colored"
-            android:scaleX="1"
-            android:scaleY="1"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:contentDescription="Roome Logo"
-            android:scaleType="fitCenter"
             android:src="@mipmap/logo_word"
             android:padding="5px"
+
             />
 
 
@@ -51,14 +49,13 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="30dp"
-            android:gravity="bottom|center_horizontal"
+            android:paddingTop="0dp"
+            android:gravity="top|center_horizontal"
             android:animateLayoutChanges="true"
-            android:paddingBottom="50dp"
             android:paddingLeft="50dp"
             android:paddingRight="50dp">
 
-                <LinearLayout
+            <LinearLayout
                     android:id="@+id/email_field"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -122,36 +119,76 @@
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 android:visibility="visible"
-                android:weightSum="2">
+                >
 
                 <Button
                     android:id="@+id/email_create_account_button"
-                    android:layout_width="0dp"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
+                    android:layout_weight="0.25"
                     android:textSize="20sp"
                     android:textColor="@android:color/white"
-                    android:paddingLeft="1dp"
-                    android:paddingTop="1dp"
-                    android:paddingRight="0dp"
-                    android:paddingBottom="1dp"
                     android:fontFamily="sans-serif-condensed"
-                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:background="@drawable/round_corner_button"
                     android:text="@string/create_account"
-                    android:bottomRightRadius="7dp" android:bottomLeftRadius="7dp"
-                    android:topLeftRadius="7dp" android:topRightRadius="7dp"/>
+                   />
 
                 <Button
                     android:id="@+id/email_sign_in_button"
                     style="@style/Widget.AppCompat.Button"
-                    android:layout_width="0dp"
-                    android:textColor="@android:color/white"
-                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
                     android:layout_weight="1"
+                    android:textColor="@android:color/white"
+                    android:layout_marginLeft="20dp"
+                    android:layout_height="wrap_content"
                     android:textSize="20sp"
                     android:background="@drawable/round_corner_button_primary"
                     android:fontFamily="sans-serif-condensed"
                     android:text="@string/sign_in" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/google_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                android:layout_below="@id/email_password_buttons"
+                android:focusable="true"
+                android:paddingBottom="10dp"
+                android:paddingTop="10dp"
+                android:focusableInTouchMode ="true">
+
+                <com.google.android.gms.common.SignInButton
+                    android:id="@+id/sign_in_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+
+                    />
+
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/facebook_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/google_field"
+                android:orientation="horizontal"
+                android:visibility="visible"
+                android:focusable="true"
+                android:paddingBottom="10dp"
+                android:focusableInTouchMode ="true">
+
+                <com.facebook.login.widget.LoginButton
+                    android:id="@+id/login_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingBottom="16dp"
+                    android:paddingTop="16dp"
+                    android:textSize="16dp" />
+
             </LinearLayout>
 
             <LinearLayout
