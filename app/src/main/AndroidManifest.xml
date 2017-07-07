@@ -45,7 +45,11 @@
             android:name=".Activity.DailyNotificationsActivity"
             android:label="@string/app_name"
             android:theme="@style/ThemeOverlay.MyNoTitleActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".Activity.NotificationBuilderActivity"
@@ -60,11 +64,6 @@
             android:name=".Activity.Onboarding"
             android:label="@string/title_activity_onboarding"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
     </application>
 

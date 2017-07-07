@@ -50,6 +50,7 @@ import com.neelakshbhatia.roome.Objects.Card;
 import com.neelakshbhatia.roome.Objects.CheckedReminderList;
 import com.neelakshbhatia.roome.Adapters.MessageAdapter;
 import com.neelakshbhatia.roome.R;
+import com.neelakshbhatia.roome.Utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,6 +83,10 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
     private Intent loginActivty;
     private Intent refresh;
 
+    //Onboarding check
+    public static final String PREF_USER_FIRST_TIME = "lets go";
+
+
     private SwipeRefreshLayout swipeContainer;
 
     Card value = new Card("","","","",reminder_array);
@@ -91,6 +96,7 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
     private String m_TextMessage = "";
 
     private static RecyclerView recyclerView;
+    private Boolean isUserFirstTime;
 
     public static RecyclerView getRecyclerView(){
         return recyclerView;
@@ -106,6 +112,14 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         super.onCreate(savedInstanceState);
+        isUserFirstTime = Boolean.valueOf(Utils.readSharedSetting(DailyNotificationsActivity.this, PREF_USER_FIRST_TIME, "true"));
+
+        Intent introIntent = new Intent(DailyNotificationsActivity.this, Onboarding.class);
+        introIntent.putExtra(PREF_USER_FIRST_TIME, isUserFirstTime);
+        if (isUserFirstTime){
+            startActivity(introIntent);
+        }
+
         setContentView(R.layout.activity_daily_notifications);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);

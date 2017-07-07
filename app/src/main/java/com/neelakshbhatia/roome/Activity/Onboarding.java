@@ -68,8 +68,8 @@ public class Onboarding extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        final int color1 = ContextCompat.getColor(this, R.color.com_facebook_blue);
-        final int color2 = ContextCompat.getColor(this, R.color.colorPrimary);
+        final int color1 = ContextCompat.getColor(this, R.color.colorPrimaryDark);
+        final int color2 = ContextCompat.getColor(this, R.color.colorPrimaryDark);
         final int color3 = ContextCompat.getColor(this, R.color.com_facebook_likeview_text_color);
 
         final int[] colorList = new int[]{color1, color2, color3};
@@ -135,7 +135,9 @@ public class Onboarding extends AppCompatActivity {
                 }
 
                 mNextBtn.setVisibility(position == 2 ? View.GONE : View.VISIBLE);
-                mFinishBtn.setVisibility(position == 2 ? View.VISIBLE : View.GONE)
+                mFinishBtn.setVisibility(position == 2 ? View.VISIBLE : View.GONE);
+                mSkipBtn.setVisibility(position == 2 ? View.GONE : View.VISIBLE);
+
             }
 
             @Override
@@ -165,7 +167,7 @@ public class Onboarding extends AppCompatActivity {
             public void onClick(View v) {
                 finish();
                 //  update 1st time pref
-                Utils.saveSharedSetting(Onboarding.this, LoginActivity.PREF_USER_FIRST_TIME, "false");
+                Utils.saveSharedSetting(Onboarding.this, DailyNotificationsActivity.PREF_USER_FIRST_TIME, "false");
 
             }
         });
@@ -214,7 +216,7 @@ public class Onboarding extends AppCompatActivity {
 
         ImageView img;
 
-        int[] bgs = new int[]{R.drawable.ic_account_circle_black_24dp, R.drawable.com_facebook_button_icon_white, R.drawable.com_facebook_send_button_icon};
+        int[] bgs = new int[]{R.drawable.house, R.drawable.money, R.drawable.collaboration};
 
         public PlaceholderFragment() {
         }
@@ -235,10 +237,23 @@ public class Onboarding extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_onboarding, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            TextView title_label = (TextView) rootView.findViewById(R.id.section_label);
+            TextView description_label = (TextView) rootView.findViewById(R.id.description_label);
 
-            img = (ImageView) rootView.findViewById(R.id.imageView);
+            if (getArguments().getInt(ARG_SECTION_NUMBER) == 1){
+                title_label.setText("Effortlessly communicate!");
+                description_label.setText("Bright and colorful cards make it easy to say whats on your mind");
+            }
+            else if (getArguments().getInt(ARG_SECTION_NUMBER) == 2){
+                title_label.setText("Track spending!");
+                description_label.setText("Beautiful charts inform you of your group's spending");
+            }
+            else if (getArguments().getInt(ARG_SECTION_NUMBER) == 3){
+                title_label.setText("Keep your house neat and tidy!");
+                description_label.setText("Automatic reminders and alarms will help you stay on top of things");
+            }
+
+            img = (ImageView) rootView.findViewById(R.id.section_img);
             img.setBackgroundResource(bgs[getArguments().getInt(ARG_SECTION_NUMBER) - 1]);
 
 
