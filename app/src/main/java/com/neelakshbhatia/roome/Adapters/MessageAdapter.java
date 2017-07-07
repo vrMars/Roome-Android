@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.neelakshbhatia.roome.Activities.DailyNotificationsActivity;
+import com.neelakshbhatia.roome.Activity.DailyNotificationsActivity;
 import com.neelakshbhatia.roome.Objects.Card;
 import com.neelakshbhatia.roome.Objects.CheckedReminderList;
 import com.neelakshbhatia.roome.R;

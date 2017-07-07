@@ -1,4 +1,4 @@
-package com.neelakshbhatia.roome.Activities;
+package com.neelakshbhatia.roome.Activity;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -26,7 +26,7 @@ import com.neelakshbhatia.roome.Objects.CheckedReminderList;
 import com.neelakshbhatia.roome.Adapters.CheckedRemindersListAdapter;
 import com.neelakshbhatia.roome.Adapters.MessageAdapter;
 import com.neelakshbhatia.roome.R;
-import com.neelakshbhatia.roome.SwipeDismissListViewTouchListener;
+import com.neelakshbhatia.roome.Helpers.SwipeDismissListViewTouchListener;
 
 import java.util.ArrayList;
 

@@ -9,7 +9,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:background="#F1F5F8"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.neelakshbhatia.roome.MainActivity"
+    tools:context="com.neelakshbhatia.roome.Activity.DailyNotificationsActivity"
     tools:showIn="@layout/activity_daily_notifications">
 
     <TextView
@@ -42,7 +42,7 @@
 
     <com.github.clans.fab.FloatingActionMenu
         android:id="@+id/fab"
-        app:layout_behavior=".FloatingActionMenuBehavior"
+        app:layout_behavior=".Helpers.FloatingActionMenuBehavior"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="bottom|right"
@@ -114,7 +114,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:context="com.neelakshbhatia.roome.DailyNotificationsActivity"
+        tools:context="com.neelakshbhatia.roome.Activity.DailyNotificationsActivity"
         tools:showIn="@layout/app_bar_main">
 
     </android.support.constraint.ConstraintLayout>

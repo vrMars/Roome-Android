@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.neelakshbhatia.roome.Activities;
+package com.neelakshbhatia.roome.Activity;
 
 import android.content.Intent;
 import android.os.Bundle;

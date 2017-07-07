@@ -37,7 +37,7 @@
         </activity>
 
         <activity
-            android:name=".LoginActivity"
+            android:name=".Activity.LoginActivity"
             android:theme="@style/ThemeOverlay.MyNoTitleActivity"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
@@ -47,24 +47,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DailyNotificationsActivity"
+            android:name=".Activity.DailyNotificationsActivity"
             android:label="@string/app_name"
             android:theme="@style/ThemeOverlay.MyNoTitleActivity" />
 
-        <!-- <activity android:name=".MainActivity" android:parentActivityName=".LoginActivity" ></activity> -->
         <activity
-            android:name=".NotificationBuilderActivity"
+            android:name=".Activity.NotificationBuilderActivity"
             android:label="@string/title_activity_notification_builder"
-            android:parentActivityName=".DailyNotificationsActivity"
+            android:parentActivityName=".Activity.DailyNotificationsActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.neelakshbhatia.roome.DailyNotificationsActivity" />
-        </activity>
-        <activity
-            android:name=".MainActivity"
-            android:label="@string/title_activity_main"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+                android:value="com.neelakshbhatia.roome.Activity.DailyNotificationsActivity" />
         </activity>
     </application>
 

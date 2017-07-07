@@ -1,4 +1,4 @@
-package com.neelakshbhatia.roome;
+package com.neelakshbhatia.roome.Activity;
 
 import android.app.ProgressDialog;
 import android.support.annotation.VisibleForTesting;
