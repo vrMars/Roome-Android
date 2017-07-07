@@ -161,7 +161,7 @@ public class LoginActivity extends BaseActivity implements
                 final Runnable r = new Runnable() {
                     public void run() {
                         ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView);
-                        scrollView.smoothScrollTo(0, 500);
+                        scrollView.smoothScrollTo(0, 200);
                         handler.postDelayed(this, 200);
                     }
                 };
@@ -178,7 +178,7 @@ public class LoginActivity extends BaseActivity implements
                 final Runnable r = new Runnable() {
                     public void run() {
                         ScrollView scrollView = (ScrollView) findViewById(R.id.scrollView);
-                        scrollView.smoothScrollTo(0, 500);
+                        scrollView.smoothScrollTo(0, 200);
                         handler.postDelayed(this, 200);
                     }
                 };

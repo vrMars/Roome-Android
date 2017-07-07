@@ -14,6 +14,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -30,6 +31,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.facebook.login.LoginManager;
+import com.firebase.ui.auth.AuthUI;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
@@ -76,6 +78,10 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
     private FirebaseAuth mAuth;
     private ArrayList<CheckedReminderList> reminder_array;
 
+    private Intent loginActivty;
+    private Intent refresh;
+
+    private SwipeRefreshLayout swipeContainer;
 
     Card value = new Card("","","","",reminder_array);
     int rmPosition;
@@ -94,7 +100,7 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
     public static MessageAdapter getAdapter(){
         return adapter;
     }
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
@@ -103,162 +109,163 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
         myToolbar.setTitle("Home");
-
-        //Nav drawer
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, myToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        View header = navigationView.getHeaderView(0);
-        TextView account = (TextView) header.findViewById(R.id.account_text_view);
-        account.setTextSize(18);
-
-        fab = (FloatingActionMenu) findViewById(R.id.fab);
-        fab.setClosedOnTouchOutside(true);
-        com.github.clans.fab.FloatingActionButton reminder = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item1);
-                reminder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent createNotification = new Intent(getApplicationContext(),NotificationBuilderActivity.class);
-                createNotification.putExtra("type","Reminder");
-                startActivity(createNotification);
-            }
-        });
-        com.github.clans.fab.FloatingActionButton poll = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item2);
-        poll.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent createNotification = new Intent(getApplicationContext(),NotificationBuilderActivity.class);
-                createNotification.putExtra("type","Poll");
-                startActivity(createNotification);
-            }
-        });
-        com.github.clans.fab.FloatingActionButton message = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item3);
-        message.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent createNotification = new Intent(getApplicationContext(),NotificationBuilderActivity.class);
-                createNotification.putExtra("type","Message");
-                startActivity(createNotification);
-            }
-        });
-
-        //Recycle view + adapter
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        cardList = new ArrayList<>();
-        adapter = new MessageAdapter(this, cardList);
-        emptyCardList = (TextView) findViewById(R.id.emptyCardView);
-
-        if (cardList.size()==0){
-            emptyCardList.setVisibility(View.VISIBLE);
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            loginActivty = new Intent (this,LoginActivity.class);
+            startActivity(loginActivty);
         }
 
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
 
 
-        //RecyclerView for Cards setup
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
-        recyclerView.setLayoutManager(mLayoutManager);
+            //Nav drawer
+            DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+            ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                    this, drawer, myToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+            drawer.setDrawerListener(toggle);
+            toggle.syncState();
 
-        recyclerView.setAdapter(adapter);
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.setNavigationItemSelectedListener(this);
 
-        //Swipe to delete functionality exp!
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
-        itemTouchHelper.attachToRecyclerView(recyclerView);
+            View header = navigationView.getHeaderView(0);
+            TextView account = (TextView) header.findViewById(R.id.account_text_view);
+            account.setTextSize(18);
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
-        {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy)
-            {
-                if (dy > 0 ||dy<0 && fab.isShown())
-                {
-                    fab.hideMenuButton(true);
+            fab = (FloatingActionMenu) findViewById(R.id.fab);
+            fab.setClosedOnTouchOutside(true);
+            com.github.clans.fab.FloatingActionButton reminder = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item1);
+            reminder.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent createNotification = new Intent(getApplicationContext(), NotificationBuilderActivity.class);
+                    createNotification.putExtra("type", "Reminder");
+                    startActivity(createNotification);
                 }
+            });
+            com.github.clans.fab.FloatingActionButton poll = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item2);
+            poll.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent createNotification = new Intent(getApplicationContext(), NotificationBuilderActivity.class);
+                    createNotification.putExtra("type", "Poll");
+                    startActivity(createNotification);
+                }
+            });
+            com.github.clans.fab.FloatingActionButton message = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item3);
+            message.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent createNotification = new Intent(getApplicationContext(), NotificationBuilderActivity.class);
+                    createNotification.putExtra("type", "Message");
+                    startActivity(createNotification);
+                }
+            });
+
+            //Recycle view + adapter
+            recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+            cardList = new ArrayList<>();
+            adapter = new MessageAdapter(this, cardList);
+            emptyCardList = (TextView) findViewById(R.id.emptyCardView);
+
+            if (cardList.size() == 0) {
+                emptyCardList.setVisibility(View.VISIBLE);
             }
 
+
+            //RecyclerView for Cards setup
+            RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
+            recyclerView.setLayoutManager(mLayoutManager);
+
+            recyclerView.setAdapter(adapter);
+
+            swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState)
-            {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE)
-                {
-                    fab.showMenuButton(true);
+            public void onRefresh() {
+                refresh = new Intent (DailyNotificationsActivity.this,DailyNotificationsActivity.class);
+                startActivity(refresh);
+                swipeContainer.setRefreshing(false);
+                }
+            });
+
+            //Swipe to delete functionality exp!
+            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+            itemTouchHelper.attachToRecyclerView(recyclerView);
+
+            recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    if (dy > 0 || dy < 0 && fab.isShown()) {
+                        fab.hideMenuButton(true);
+                    }
                 }
 
-                super.onScrollStateChanged(recyclerView, newState);
-            }
-        });
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                        fab.showMenuButton(true);
+                    }
 
-        //Firebase shit
-        mAuth = FirebaseAuth.getInstance();
-        account.setText(account_email);
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        mRef = database.getReference("users/"+mAuth.getCurrentUser().getUid());
-
-        mRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    value = dataSnapshot.getValue(Card.class);
-                    mKeys.add(dataSnapshot.getKey());
-                    int index = mKeys.indexOf(dataSnapshot.getKey());
-                    prepareMessages(value);
-                    emptyCardList.setVisibility(View.GONE);
-                    adapter.notifyItemInserted(index);
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                    Card newVal = dataSnapshot.getValue(Card.class);
-                    String key = dataSnapshot.getKey();
-                    int index = mKeys.indexOf(key);
-                    cardList.set(index, newVal);
-                if (cardList.size()==0){
-                    emptyCardList.setVisibility(View.VISIBLE);
+                    super.onScrollStateChanged(recyclerView, newState);
                 }
+            });
+
+            //Firebase shit
+            mAuth = FirebaseAuth.getInstance();
+            account.setText(account_email);
+
+            FirebaseDatabase database = FirebaseDatabase.getInstance();
+            if (mAuth.getCurrentUser() != null) {
+                mRef = database.getReference("users/" + mAuth.getCurrentUser().getUid());
+
+                mRef.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                        value = dataSnapshot.getValue(Card.class);
+                        mKeys.add(dataSnapshot.getKey());
+                        int index = mKeys.indexOf(dataSnapshot.getKey());
+                        prepareMessages(value);
+                        emptyCardList.setVisibility(View.GONE);
+                        adapter.notifyItemInserted(index);
+                    }
+
+                    @Override
+                    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                        Card newVal = dataSnapshot.getValue(Card.class);
+                        String key = dataSnapshot.getKey();
+                        int index = mKeys.indexOf(key);
+                        cardList.set(index, newVal);
+                        if (cardList.size() == 0) {
+                            emptyCardList.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onChildRemoved(DataSnapshot dataSnapshot) {
+                        String key = dataSnapshot.getKey();
+                        int index = mKeys.indexOf(key);
+                        mKeys.remove(key);
+                        if (!alreadyRemoved) {
+                            cardList.remove(index);
+                            adapter.notifyItemRemoved(index);
+                        }
+                        if (cardList.size() == 0) {
+                            emptyCardList.setVisibility(View.VISIBLE);
+                        }
+                        alreadyRemoved = false;
+                    }
+
+                    @Override
+                    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                String key = dataSnapshot.getKey();
-                int index = mKeys.indexOf(key);
-                mKeys.remove(key);
-                if (!alreadyRemoved) {
-                   cardList.remove(index);
-                    adapter.notifyItemRemoved(index);
-                }
-                if (cardList.size()==0){
-                    emptyCardList.setVisibility(View.VISIBLE);
-                }
-                alreadyRemoved = false;
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    @Override
-    protected void onStart() {
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-        mGoogleApiClient.connect();
-        super.onStart();
     }
 
     //LOSE FOCUS ON EDITEXT when clicked outside :o
@@ -373,19 +380,7 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         if (mAuth != null) {
             mAuth.signOut();
         }
-
         LoginManager.getInstance().logOut();
-
-
-        Auth.GoogleSignInApi.signOut(mGoogleApiClient).setResultCallback(
-                new ResultCallback<Status>() {
-                    @Override
-                    public void onResult(Status status) {
-                        // ...
-                        Intent i=new Intent(getApplicationContext(),LoginActivity.class);
-                        startActivity(i);
-                    }
-                });
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -396,6 +391,8 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
 
         if (id == R.id.nav_sign_out) {
             signOut();
+            signOut = new Intent (this,LoginActivity.class);
+            startActivity(signOut);
         } else if (id == R.id.nav_home) {
             // Do nothing (already on it)
         }
@@ -420,8 +417,6 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         super.finish();
     }
 
-
-
     // It's cleaner to animate the start of new activities the same way.
     // Override startActivity(), and call *overridePendingTransition*
     // right after the super, so every single activity transaction will be animated:
@@ -429,7 +424,9 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
     @Override
     public void startActivity(Intent intent) {
         super.startActivity(intent);
-        if (intent != signOut) {
+        Log.d("bad","1bad");
+        if (intent != signOut && intent!=refresh) {
+            Log.d("bad","2bad");
             onStartNewActivity();
         }
     }
@@ -437,8 +434,13 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
     @Override
     public void startActivity(Intent intent, Bundle options) {
         super.startActivity(intent, options);
-        if (intent != signOut) {
+        Log.d("bad","REALLYbad");
+        if (intent != signOut && intent!=refresh) {
+            Log.d("bad","REALLYbad2");
             onStartNewActivity();
+        }
+        else if (intent == refresh){
+            overridePendingTransition(0,0);
         }
     }
 
