@@ -58,6 +58,8 @@ import static com.neelakshbhatia.roome.Activity.LoginActivity.account_email;
 
 public class DailyNotificationsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "LOG";
+
+    //Items for Card-> cardList -> RecyclerView + Animations
     private List<Card> cardList;
     private ArrayList<String> mKeys = new ArrayList<>();
     private DatabaseReference mRef;
@@ -87,20 +89,12 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         return recyclerView;
     }
 
-    public void setRecyclerView(RecyclerView x){
-        this.recyclerView = x;
-    }
-
     private static MessageAdapter adapter;
 
     public static MessageAdapter getAdapter(){
         return adapter;
     }
-
-    public void setAdapter (MessageAdapter x){
-        this.adapter = x;
-    }
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
