@@ -56,7 +56,8 @@ import java.util.List;
 
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
-import static com.neelakshbhatia.roome.Activity.LoginActivity.account_email;
+import static com.neelakshbhatia.roome.Activity.LoginActivity.name;
+
 
 public class DailyNotificationsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "LOG";
@@ -211,11 +212,12 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
 
             //Firebase shit
             mAuth = FirebaseAuth.getInstance();
-            account.setText(account_email);
+            account.setText(mAuth.getCurrentUser().getDisplayName());
+
 
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             if (mAuth.getCurrentUser() != null) {
-                mRef = database.getReference("users/" + mAuth.getCurrentUser().getUid());
+                mRef = database.getReference("GroupX/cards");
 
                 mRef.addChildEventListener(new ChildEventListener() {
                     @Override

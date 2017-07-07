@@ -63,10 +63,15 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.neelakshbhatia.roome.R;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 public class LoginActivity extends BaseActivity implements
         View.OnClickListener, View.OnTouchListener {
@@ -78,7 +83,6 @@ public class LoginActivity extends BaseActivity implements
     private EditText mEmailField;
     private CallbackManager callbackManager;
     private EditText mPasswordField;
-    public static String account_email;
 
     // [START declare_auth]
     private FirebaseAuth mAuth;
@@ -86,6 +90,7 @@ public class LoginActivity extends BaseActivity implements
     private String mCustomToken;
 
     Intent startMain;
+    public static String name;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,13 +116,6 @@ public class LoginActivity extends BaseActivity implements
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
                                 Log.v("LoginActivity", response.toString());
-
-                                // Application code
-                                try {
-                                    account_email = object.getString("email");
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
                             }
                         });
                 Bundle parameters = new Bundle();
@@ -208,9 +206,6 @@ public class LoginActivity extends BaseActivity implements
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
-        if (currentUser != null) {
-            account_email = currentUser.getEmail();
-        }
         startMain = new Intent(this, DailyNotificationsActivity.class);
     }
     // [END on_start_check_user]
@@ -272,8 +267,7 @@ public class LoginActivity extends BaseActivity implements
                             FirebaseUser user = mAuth.getCurrentUser();
                             Log.d("facebook", String.valueOf(user));
                             int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
-                            startMain = new Intent(LoginActivity.this, DailyNotificationsActivity.class);
-                            startActivity(startMain);
+                            start(user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
@@ -288,7 +282,17 @@ public class LoginActivity extends BaseActivity implements
                     }
                 });
     }
-    // [END auth_with_facebook]
+    // [END auth_with_facebook]!
+    private void start(FirebaseUser user) {
+        startMain = new Intent(LoginActivity.this, DailyNotificationsActivity.class);
+        DatabaseReference root = FirebaseDatabase.getInstance().getReference().child("GroupX");
+        Log.d("tagXXX",String.valueOf(user));
+        ArrayList<String> userObj = new ArrayList<String>();
+        userObj.add(user.getDisplayName());
+        userObj.add(user.getUid());
+        root.child("members").child(user.getUid()).setValue(String.valueOf(userObj));
+        startActivity(startMain);
+    }
 
 
     private void signIn(final String email, String password) {
@@ -313,14 +317,14 @@ public class LoginActivity extends BaseActivity implements
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             if (user != null && user.isEmailVerified() == true) {
-                                account_email = user.getEmail();
+                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName("John Smith").build();
+                                user.updateProfile(profileUpdates);
                                 Log.d("haha", "TRUE");
                                 View decorView = getWindow().getDecorView();
                                 // Hide the status bar.
                                 int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
                                 decorView.setSystemUiVisibility(uiOptions);
-                                startMain = new Intent(LoginActivity.this, DailyNotificationsActivity.class);
-                                startActivity(startMain);
+                                start(user);
                             }
                         } else {
                             // If sign in fails, display a message to the user.

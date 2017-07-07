@@ -104,7 +104,7 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         }
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        mRef = database.getReference("users");
+        mRef = database.getReference("GroupX/cards");
         mAuth = FirebaseAuth.getInstance();
 
         //Get recyclerView and adapter from other activity instance
@@ -184,7 +184,7 @@ public class NotificationBuilderActivity extends AppCompatActivity {
                 x= createCard(m_TextType,m_TextTitle, m_TextMessage, m_ReminderArray);
                 if (!x.getTitle().equals("")) {
                     adapter = notificationActivity.getAdapter();
-                    mRef.child(mAuth.getCurrentUser().getUid()).child(m_TextTitle).setValue(x);
+                    mRef.child(m_TextTitle).setValue(x);
                     adapter.notifyDataSetChanged();
                 }
                 Intent startMain = new Intent (this, DailyNotificationsActivity.class);

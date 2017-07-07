@@ -78,7 +78,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final Card card = messageList.get(position);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference mRef = database.getReference("users");
+        final DatabaseReference mRef = database.getReference("GroupX/cards");
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
         if (!card.getTitle().equals("")) {
             if (card.getType().equals("Reminder")) {
@@ -105,7 +105,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                                 }
                                 reminderArray.get(position).setReminderCheck(!reminderArray.get(position).getReminderCheck());
                                 card.setReminderArray(reminderArray);
-                                mRef.child(mAuth.getCurrentUser().getUid()).child(card.getTitle()).setValue(card);
+                                mRef.child(card.getTitle()).setValue(card);
                                 lastPosition++;
                             }
                         }
@@ -116,7 +116,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                         if (reminderArray.get(i).getReminderCheck()) {
                             reminderArray.remove(i);
                             card.setReminderArray(reminderArray);
-                            mRef.child(mAuth.getCurrentUser().getUid()).child(card.getTitle()).setValue(card);
+                            mRef.child(card.getTitle()).setValue(card);
                         }
                         listAdapter.notifyDataSetChanged();
                     }

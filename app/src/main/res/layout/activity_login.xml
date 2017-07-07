@@ -79,7 +79,7 @@
                         android:fontFamily="sans-serif-black"
                         android:inputType="textEmailAddress" />
 
-                </LinearLayout>
+            </LinearLayout>
 
 
             <LinearLayout
