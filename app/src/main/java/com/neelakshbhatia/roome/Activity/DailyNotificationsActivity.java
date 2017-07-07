@@ -212,7 +212,9 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
 
             //Firebase shit
             mAuth = FirebaseAuth.getInstance();
-            account.setText(mAuth.getCurrentUser().getDisplayName());
+            if (mAuth.getCurrentUser()!=null) {
+                account.setText(mAuth.getCurrentUser().getDisplayName());
+            }
 
 
             FirebaseDatabase database = FirebaseDatabase.getInstance();
