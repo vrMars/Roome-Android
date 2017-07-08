@@ -69,7 +69,7 @@ public class Onboarding extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         final int color1 = ContextCompat.getColor(this, R.color.colorPrimaryDark);
-        final int color2 = ContextCompat.getColor(this, R.color.colorPrimaryDark);
+        final int color2 = Color.parseColor("#459945");
         final int color3 = ContextCompat.getColor(this, R.color.com_facebook_likeview_text_color);
 
         final int[] colorList = new int[]{color1, color2, color3};

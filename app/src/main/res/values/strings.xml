@@ -35,6 +35,9 @@
         <item>Poll</item>
     </string-array>
 
+    <string name="Fab_title">Add some messages!</string>
+    <string name="Fab_desc">Click the + button to add a message!</string>
+
     <string name="hint_user_id">User ID</string>
     <string name="Continue">Continue</string>
     <string name="get_custom_token">Get Token</string>

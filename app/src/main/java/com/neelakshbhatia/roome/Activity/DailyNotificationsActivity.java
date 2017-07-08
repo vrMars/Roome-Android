@@ -9,6 +9,8 @@ import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -51,6 +53,9 @@ import com.neelakshbhatia.roome.Objects.CheckedReminderList;
 import com.neelakshbhatia.roome.Adapters.MessageAdapter;
 import com.neelakshbhatia.roome.R;
 import com.neelakshbhatia.roome.Utils.Utils;
+import com.wooplr.spotlight.SpotlightView;
+
+import org.puder.highlight.HighlightManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -84,7 +89,7 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
     private Intent refresh;
 
     //Onboarding check
-    public static final String PREF_USER_FIRST_TIME = "lets go";
+    public static final String PREF_USER_FIRST_TIME = "abcd";
 
 
     private SwipeRefreshLayout swipeContainer;
@@ -97,6 +102,7 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
 
     private static RecyclerView recyclerView;
     private Boolean isUserFirstTime;
+    private SpotlightView spotLight;
 
     public static RecyclerView getRecyclerView(){
         return recyclerView;
@@ -110,6 +116,7 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        HighlightManager highlightManager = new HighlightManager(DailyNotificationsActivity.this);
         getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
         super.onCreate(savedInstanceState);
         isUserFirstTime = Boolean.valueOf(Utils.readSharedSetting(DailyNotificationsActivity.this, PREF_USER_FIRST_TIME, "true"));
@@ -118,7 +125,10 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         introIntent.putExtra(PREF_USER_FIRST_TIME, isUserFirstTime);
         if (isUserFirstTime){
             startActivity(introIntent);
+
         }
+
+
 
         setContentView(R.layout.activity_daily_notifications);
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -147,7 +157,11 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
             account.setTextSize(18);
 
             fab = (FloatingActionMenu) findViewById(R.id.fab);
-            fab.setClosedOnTouchOutside(true);
+
+
+        fab.setClosedOnTouchOutside(true);
+
+
             com.github.clans.fab.FloatingActionButton reminder = (com.github.clans.fab.FloatingActionButton) findViewById(R.id.material_design_floating_action_menu_item1);
             reminder.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -178,6 +192,10 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
 
             //Recycle view + adapter
             recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        highlightManager.addView(R.id.material_design_floating_action_menu_item3).setTitle(R.string.Fab_title)
+                .setDescriptionId(R.string.Fab_desc)
+                .setScreenPosition(0,0,0,0);
+
             cardList = new ArrayList<>();
             adapter = new MessageAdapter(this, cardList);
             emptyCardList = (TextView) findViewById(R.id.emptyCardView);

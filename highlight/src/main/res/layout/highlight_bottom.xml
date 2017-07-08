@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<org.puder.highlight.internal.HighlightView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/highlight_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <Button
+        android:id="@+id/highlight_button"
+        style="@style/HighlightButton"
+        android:text="@string/default_button_label"
+        android:textColor="@android:color/white"
+        android:textSize="20dp"
+        android:layout_below="@+id/highlight_description"/>
+
+    <TextView
+        android:id="@+id/highlight_title"
+        style="@style/HighlightTitle"/>
+
+    <TextView
+        android:id="@+id/highlight_description"
+        style="@style/HighlightDescription"
+        android:layout_below="@+id/highlight_title"/>
+
+</org.puder.highlight.internal.HighlightView>
