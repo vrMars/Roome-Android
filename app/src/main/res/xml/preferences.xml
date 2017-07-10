@@ -3,5 +3,9 @@
     <EditTextPreference android:title="Enter group name"
         android:key="groupName"
         android:summary="Enter group name"></EditTextPreference>
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="leave_current_group"
+        android:title="Leave group?" />
 
 </PreferenceScreen>

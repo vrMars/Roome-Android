@@ -84,7 +84,6 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         String strUserName = SP.getString("groupName", "NA");
         final DatabaseReference mRef = database.getReference(strUserName+"/cards");
-        final FirebaseAuth mAuth = FirebaseAuth.getInstance();
         if (!card.getTitle().equals("")) {
             if (card.getType().equals("Reminder")) {
                 holder.parentCard.setCardBackgroundColor(Color.parseColor("#b71c1c"));

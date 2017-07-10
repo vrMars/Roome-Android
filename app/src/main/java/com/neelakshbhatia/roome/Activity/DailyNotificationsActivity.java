@@ -90,6 +90,8 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
     private Intent loginActivty;
     private Intent refresh;
 
+    private String oldGroup = "kappa";
+
     public static  SharedPreferences SP;
 
     //Onboarding check
@@ -129,9 +131,7 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         introIntent.putExtra(PREF_USER_FIRST_TIME, isUserFirstTime);
         if (isUserFirstTime){
             startActivity(introIntent);
-
         }
-
 
 
         setContentView(R.layout.activity_daily_notifications);
@@ -257,6 +257,21 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
             if (mAuth.getCurrentUser() != null) {
                 SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String strUserName = SP.getString("groupName", "NA");
+
+                if (!strUserName.equals("NA")) {
+                    ArrayList<String> userObj = new ArrayList<String>();
+                    userObj.add(mAuth.getCurrentUser().getDisplayName());
+                    userObj.add(mAuth.getCurrentUser().getUid());
+                    DatabaseReference root = FirebaseDatabase.getInstance().getReference().child(strUserName);
+                    root.child("members").child(mAuth.getCurrentUser().getUid()).setValue(userObj);
+                }
+                Log.d("poop",oldGroup);
+                if (!oldGroup.equals(strUserName)){
+                    DatabaseReference root = FirebaseDatabase.getInstance().getReference().child(oldGroup);
+                    root.child("members").child(mAuth.getCurrentUser().getUid()).removeValue();
+                    oldGroup = strUserName;
+                }
+
                 mRef = database.getReference(strUserName+"/cards");
 
                 mRef.addChildEventListener(new ChildEventListener() {
