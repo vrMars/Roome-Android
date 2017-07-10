@@ -136,6 +136,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
             }
             else if (card.getType().equals("Poll")){
                 holder.parentCard.setCardBackgroundColor(Color.parseColor("#034f21"));
+                holder.parentCard.setRadius(70);
             }
             else{
                 holder.parentCard.setCardBackgroundColor(Color.parseColor("#2b81e2"));

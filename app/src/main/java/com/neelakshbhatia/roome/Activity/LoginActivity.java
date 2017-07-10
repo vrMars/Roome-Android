@@ -86,6 +86,7 @@ public class LoginActivity extends BaseActivity implements
     private CallbackManager callbackManager;
     private EditText mPasswordField;
 
+    public static boolean update = false;
     public static String originalGroup = "";
     // [START declare_auth]
     private FirebaseAuth mAuth;
@@ -269,7 +270,6 @@ public class LoginActivity extends BaseActivity implements
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
                             Log.d("facebook", String.valueOf(user));
-                            int uiOptions = View.SYSTEM_UI_FLAG_FULLSCREEN;
                             start(user);
                         } else {
                             // If sign in fails, display a message to the user.

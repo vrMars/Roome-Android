@@ -519,4 +519,14 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
     protected void onStartNewActivity() {
         overridePendingTransition(R.transition.enter_from_right, R.transition.exit_to_left);
     }
+
+    void updatePreferences(boolean update) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());;
+        if(update) {
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.clear();
+            update = false;
+            editor.commit();
+        }
+    }
 }

@@ -16,13 +16,13 @@
         android:id="@+id/emptyCardView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="No Messages :("
-        android:letterSpacing="0.2"
-        android:textSize="35dp"
+        android:text="@string/no_messages_pull_to_refresh"
+        android:letterSpacing="0.1"
+        android:textSize="14dp"
         android:textAlignment="center"
         android:gravity="center_vertical"
         android:textAllCaps="true"
-        android:alpha="0.2"
+        android:alpha="0.3"
         android:visibility="gone"/>
 
     <android.support.v4.widget.SwipeRefreshLayout
