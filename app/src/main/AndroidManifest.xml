@@ -65,6 +65,11 @@
             android:label="@string/title_activity_onboarding"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".Activity.MyPreferencesActivity"
+            android:label="Settings"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

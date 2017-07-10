@@ -17,8 +17,10 @@
 package com.neelakshbhatia.roome.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
@@ -285,7 +287,9 @@ public class LoginActivity extends BaseActivity implements
     // [END auth_with_facebook]!
     private void start(FirebaseUser user) {
         startMain = new Intent(LoginActivity.this, DailyNotificationsActivity.class);
-        DatabaseReference root = FirebaseDatabase.getInstance().getReference().child("GroupX");
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String strUserName = SP.getString("groupName", "NA");
+        DatabaseReference root = FirebaseDatabase.getInstance().getReference().child(strUserName);
         Log.d("tagXXX",String.valueOf(user));
         ArrayList<String> userObj = new ArrayList<String>();
         userObj.add(user.getDisplayName());

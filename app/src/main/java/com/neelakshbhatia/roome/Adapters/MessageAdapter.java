@@ -1,8 +1,10 @@
 package com.neelakshbhatia.roome.Adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
@@ -25,6 +27,8 @@ import com.neelakshbhatia.roome.R;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.neelakshbhatia.roome.Activity.DailyNotificationsActivity.SP;
 
 
 /**
@@ -78,7 +82,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final Card card = messageList.get(position);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        final DatabaseReference mRef = database.getReference("GroupX/cards");
+        String strUserName = SP.getString("groupName", "NA");
+        final DatabaseReference mRef = database.getReference(strUserName+"/cards");
         final FirebaseAuth mAuth = FirebaseAuth.getInstance();
         if (!card.getTitle().equals("")) {
             if (card.getType().equals("Reminder")) {

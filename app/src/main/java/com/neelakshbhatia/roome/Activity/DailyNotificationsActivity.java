@@ -2,6 +2,7 @@ package com.neelakshbhatia.roome.Activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
@@ -11,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -87,6 +89,8 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
 
     private Intent loginActivty;
     private Intent refresh;
+
+    public static  SharedPreferences SP;
 
     //Onboarding check
     public static final String PREF_USER_FIRST_TIME = "abcd";
@@ -251,7 +255,9 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
 
             FirebaseDatabase database = FirebaseDatabase.getInstance();
             if (mAuth.getCurrentUser() != null) {
-                mRef = database.getReference("GroupX/cards");
+                SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                String strUserName = SP.getString("groupName", "NA");
+                mRef = database.getReference(strUserName+"/cards");
 
                 mRef.addChildEventListener(new ChildEventListener() {
                     @Override
@@ -431,6 +437,10 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
             startActivity(signOut);
         } else if (id == R.id.nav_home) {
             // Do nothing (already on it)
+        }
+        else if (id == R.id.settings){
+            Intent i = new Intent(this, MyPreferencesActivity.class);
+            startActivity(i);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

@@ -1,8 +1,10 @@
 package com.neelakshbhatia.roome.Activity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -104,7 +106,9 @@ public class NotificationBuilderActivity extends AppCompatActivity {
         }
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        mRef = database.getReference("GroupX/cards");
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+        String strUserName = SP.getString("groupName", "NA");
+        mRef = database.getReference(strUserName+"/cards");
         mAuth = FirebaseAuth.getInstance();
 
         //Get recyclerView and adapter from other activity instance
