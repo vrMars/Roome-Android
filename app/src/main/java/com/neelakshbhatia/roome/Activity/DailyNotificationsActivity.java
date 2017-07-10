@@ -273,8 +273,11 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
                 else if (leaveGroup){
                     SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                     strUserName= SP.getString("groupName","NA");
-                    DatabaseReference root = FirebaseDatabase.getInstance().getReference().child(strUserName);
-                    root.child("members").child(mAuth.getCurrentUser().getUid()).removeValue();
+                    if (originalGroup!=strUserName) {
+                        DatabaseReference root1 = FirebaseDatabase.getInstance().getReference().child(originalGroup);
+                        root1.child("members").child(mAuth.getCurrentUser().getUid()).removeValue();
+                        originalGroup = strUserName;
+                    }
                     SharedPreferences.Editor editor = SP.edit();
                     editor.clear();
                     editor.commit();
