@@ -86,12 +86,12 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
         final DatabaseReference mRef = database.getReference(strUserName+"/cards");
         if (!card.getTitle().equals("")) {
             if (card.getType().equals("Reminder")) {
-                holder.parentCard.setCardBackgroundColor(Color.parseColor("#b71c1c"));
+                holder.parentCard.setCardBackgroundColor(Color.parseColor("#bc3100"));
                 holder.parentCard.setRadius(70);
                 int height = 0;
                 if (card.getReminderArray()!=null) {
                     height = card.getReminderArray().size();
-                    holder.parentCard.getLayoutParams().height = (int) convertDpToPixel(150 + (height * 40));
+                    holder.parentCard.getLayoutParams().height = (int) convertDpToPixel(400 + (height * 60));
 
                     final ArrayList<CheckedReminderList> reminderArray = card.getReminderArray();
                     final CheckedRemindersListAdapter listAdapter = new CheckedRemindersListAdapter(mContext, reminderArray);
@@ -125,7 +125,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                         listAdapter.notifyDataSetChanged();
                     }
                     height = card.getReminderArray().size();
-                    holder.parentCard.getLayoutParams().height = (int) convertDpToPixel(150 + (height * 35));
+                    holder.parentCard.getLayoutParams().height = (int) convertDpToPixel(150 + (height * 45));
                 }
                 else{
                     holder.parentCard.setCardBackgroundColor(Color.parseColor("#559e83"));
@@ -135,10 +135,10 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MyViewHo
                 }
             }
             else if (card.getType().equals("Poll")){
-                holder.parentCard.setCardBackgroundColor(Color.parseColor("#546e7a"));
+                holder.parentCard.setCardBackgroundColor(Color.parseColor("#034f21"));
             }
             else{
-                holder.parentCard.setCardBackgroundColor(Color.parseColor("#1565c0"));
+                holder.parentCard.setCardBackgroundColor(Color.parseColor("#2b81e2"));
             }
             holder.type.setText(card.getType());
             holder.title.setText(card.getTitle());

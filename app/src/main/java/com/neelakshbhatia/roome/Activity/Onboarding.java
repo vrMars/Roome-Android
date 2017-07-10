@@ -96,7 +96,6 @@ public class Onboarding extends AppCompatActivity {
 
         mCoordinator = (CoordinatorLayout) findViewById(R.id.main_content);
 
-
         indicators = new ImageView[]{zero, one, two};
 
         // Set up the ViewPager with the sections adapter.
