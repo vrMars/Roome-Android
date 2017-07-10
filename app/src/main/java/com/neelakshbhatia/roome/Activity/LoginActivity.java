@@ -86,6 +86,7 @@ public class LoginActivity extends BaseActivity implements
     private CallbackManager callbackManager;
     private EditText mPasswordField;
 
+    public static String originalGroup = "";
     // [START declare_auth]
     private FirebaseAuth mAuth;
     // [END declare_auth]
@@ -289,6 +290,7 @@ public class LoginActivity extends BaseActivity implements
         startMain = new Intent(LoginActivity.this, DailyNotificationsActivity.class);
         SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         String strUserName = SP.getString("groupName", "NA");
+        originalGroup = strUserName;
         DatabaseReference root = FirebaseDatabase.getInstance().getReference().child(strUserName);
         Log.d("tagXXX",String.valueOf(user));
         ArrayList<String> userObj = new ArrayList<String>();

@@ -65,6 +65,7 @@ import java.util.List;
 import jp.wasabeef.recyclerview.animators.SlideInUpAnimator;
 
 import static com.neelakshbhatia.roome.Activity.LoginActivity.name;
+import static com.neelakshbhatia.roome.Activity.LoginActivity.originalGroup;
 
 
 public class DailyNotificationsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -89,8 +90,6 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
 
     private Intent loginActivty;
     private Intent refresh;
-
-    private String oldGroup = "kappa";
 
     public static  SharedPreferences SP;
 
@@ -257,21 +256,29 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
             if (mAuth.getCurrentUser() != null) {
                 SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
                 String strUserName = SP.getString("groupName", "NA");
+                boolean leaveGroup = SP.getBoolean("leave_current_group",false);
 
-                if (!strUserName.equals("NA")) {
+                if (!leaveGroup) {
+                    if (originalGroup!=strUserName) {
+                        DatabaseReference root1 = FirebaseDatabase.getInstance().getReference().child(originalGroup);
+                        root1.child("members").child(mAuth.getCurrentUser().getUid()).removeValue();
+                        originalGroup = strUserName;
+                    }
                     ArrayList<String> userObj = new ArrayList<String>();
                     userObj.add(mAuth.getCurrentUser().getDisplayName());
                     userObj.add(mAuth.getCurrentUser().getUid());
                     DatabaseReference root = FirebaseDatabase.getInstance().getReference().child(strUserName);
                     root.child("members").child(mAuth.getCurrentUser().getUid()).setValue(userObj);
                 }
-                Log.d("poop",oldGroup);
-                if (!oldGroup.equals(strUserName)){
-                    DatabaseReference root = FirebaseDatabase.getInstance().getReference().child(oldGroup);
+                else if (leaveGroup){
+                    SP = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
+                    strUserName= SP.getString("groupName","NA");
+                    DatabaseReference root = FirebaseDatabase.getInstance().getReference().child(strUserName);
                     root.child("members").child(mAuth.getCurrentUser().getUid()).removeValue();
-                    oldGroup = strUserName;
+                    SharedPreferences.Editor editor = SP.edit();
+                    editor.clear();
+                    editor.commit();
                 }
-
                 mRef = database.getReference(strUserName+"/cards");
 
                 mRef.addChildEventListener(new ChildEventListener() {
@@ -447,9 +454,10 @@ public class DailyNotificationsActivity extends AppCompatActivity implements Nav
         int id = item.getItemId();
 
         if (id == R.id.nav_sign_out) {
-            signOut();
-            signOut = new Intent (this,LoginActivity.class);
-            startActivity(signOut);
+                signOut();
+                signOut = new Intent(this, LoginActivity.class);
+                startActivity(signOut);
+
         } else if (id == R.id.nav_home) {
             // Do nothing (already on it)
         }
