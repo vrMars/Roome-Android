@@ -71,7 +71,7 @@ import static com.neelakshbhatia.roome.Activity.LoginActivity.originalGroup;
 public class DailyNotificationsActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private static final String TAG = "LOG";
 
-    //Items for Card-> cardList -> RecyclerView + Animations
+    //Items for Card-> cardList -> RecyclerView + Animations!
     private List<Card> cardList;
     private ArrayList<String> mKeys = new ArrayList<>();
     private DatabaseReference mRef;
