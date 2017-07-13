@@ -16,7 +16,7 @@ public class BaseActivity extends FragmentActivity {
             mProgressDialog.setMessage("loading");
             mProgressDialog.setIndeterminate(true);
         }
-
+        //Show
         mProgressDialog.show();
     }
 
