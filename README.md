@@ -7,6 +7,6 @@ Roome provides:
 <li>Robust finance tracking</li>
 <li>Smart reminders to ensure your house is neat and tidy!</li>
 </ul>
-Design in a WIP
+<span style="font-size:14px;">Design is a WIP...</span>
 <br/>
 <img src="http://i.imgur.com/AdIvJaA.png" width="256" title="design is WIP"><img src="http://i.imgur.com/QIPTnE6.png" width="256">
