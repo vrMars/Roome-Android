@@ -7,6 +7,6 @@ Roome provides:
 <li>Robust finance tracking</li>
 <li>Smart reminders to ensure your house is neat and tidy!</li>
 </ul>
-
-<img src="http://i.imgur.com/AdIvJaA.png" width="256"><img src="http://i.imgur.com/QIPTnE6.png" width="256">
-(design is a WIP)
+Design in a WIP
+<br/>
+<img src="http://i.imgur.com/AdIvJaA.png" width="256" title="design is WIP"><img src="http://i.imgur.com/QIPTnE6.png" width="256">
