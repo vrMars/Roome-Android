@@ -8,5 +8,5 @@ Roome provides:
 <li>Smart reminders to ensure your house is neat and tidy!</li>
 </ul>
 
-(design is a WIP)
 <img src="http://i.imgur.com/AdIvJaA.png" width="256"><img src="http://i.imgur.com/QIPTnE6.png" width="256">
+(design is a WIP)
